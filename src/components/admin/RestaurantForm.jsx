@@ -3,13 +3,21 @@ import { useData } from '../../context/DataContext';
 import { processcover, processLogo } from '../../utils/storage';
 import s from './AdminForms.module.css';
 
-export default function RestaurantForm({ showToast }) {
+export default function RestaurantForm({ showToast, onFormChange }) {
     const { db, update } = useData();
-    const [form, setForm] = useState(db.restaurant);
+    const emptyRest = { name: '', tagline: '', coverUrl: '', logoUrl: '', phone: '', whatsapp: '', address: '', hours: '', wifi: '', rating: '' };
+    const [form, setForm] = useState(db?.restaurant || emptyRest);
     const coverRef = useRef(null);
     const logoRef = useRef(null);
 
-    useEffect(() => setForm(db.restaurant), [db.restaurant]);
+    useEffect(() => { if (db?.restaurant) setForm(db.restaurant); }, [db?.restaurant]);
+
+
+    // Report form changes to parent so it can auto-save on tab switch
+    useEffect(() => {
+        if (onFormChange) onFormChange(form);
+    }, [form, onFormChange]);
+
     const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
     const handleFile = async (e, key) => {

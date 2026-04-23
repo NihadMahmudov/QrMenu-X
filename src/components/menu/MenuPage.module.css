@@ -102,3 +102,12 @@
 .tableInput input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:16px;text-align:center}
 .tableBtn{width:100%;padding:13px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer}
 @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+@media (max-width: 480px) {
+    .topBar { padding: 8px 12px }
+    .iconBtn { padding: 6px 10px; font-size: 12px }
+    .heroCover { height: 350px }
+    .heroName { font-size: 24px }
+    .card { padding: 12px; gap: 12px }
+    .imgWrap { width: 90px; height: 90px }
+}

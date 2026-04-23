@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { loadDB, saveDB as saveToDisk, getActiveOwner } from '../utils/storage';
 
 const DataContext = createContext(null);
@@ -9,6 +9,19 @@ export function DataProvider({ children }) {
         const email = getActiveOwner();
         return email ? (loadDB(email) || null) : null;
     });
+
+    // Listen for storage changes (for live preview in iframe)
+    useEffect(() => {
+        const handleStorage = () => {
+            const email = getActiveOwner();
+            if (email) {
+                setOwnerEmail(email);
+                setDb(loadDB(email));
+            }
+        };
+        window.addEventListener('storage', handleStorage);
+        return () => window.removeEventListener('storage', handleStorage);
+    }, []);
 
     const loadOwner = useCallback((email) => {
         setOwnerEmail(email);
@@ -31,8 +44,13 @@ export function DataProvider({ children }) {
         saveToDisk(email, data);
     }, []);
 
+    const clearOwner = useCallback(() => {
+        setOwnerEmail(null);
+        setDb(null);
+    }, []);
+
     return (
-        <DataContext.Provider value={{ db, update, ownerEmail, loadOwner, setFullDB }}>
+        <DataContext.Provider value={{ db, update, ownerEmail, loadOwner, setFullDB, clearOwner }}>
             {children}
         </DataContext.Provider>
     );

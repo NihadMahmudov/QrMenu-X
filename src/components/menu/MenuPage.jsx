@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { useCart } from '../../context/CartContext';
 import { useToast } from '../../hooks/useToast';
@@ -13,13 +13,18 @@ const FALLBACK_COVER = 'https://images.unsplash.com/photo-1517248135467-4c7edcad
 const FALLBACK_LOGO = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=300&q=80';
 
 export default function MenuPage() {
-    const { db: contextDb } = useData();
+    const navigate = useNavigate();
+    const { db: contextDb, ownerEmail } = useData();
     const { addToCart, setTableNumber, tableNumber } = useCart();
     const { message, visible, showToast } = useToast();
 
     // Load from active owner's data (or context if available)
     const activeDB = loadActiveDB();
     const db = activeDB || contextDb;
+
+    // Check if user has actually configured their menu
+    // If they registered but haven't added items or restaurant name, show demo
+    const hasUserContent = db && (db.items?.length > 0 || (db.restaurant?.name && db.restaurant.name.trim() !== ''));
 
     const DEMO_DB = {
         restaurant: {
@@ -107,12 +112,12 @@ export default function MenuPage() {
         ]
     };
 
-    const isDemo = !db;
-    const finalDb = db || DEMO_DB;
+    const isDemo = !hasUserContent;
+    const finalDb = hasUserContent ? db : DEMO_DB;
 
-    const R = finalDb.restaurant;
-    const CATS = finalDb.categories;
-    const ITEMS = finalDb.items;
+    const R = finalDb.restaurant || {};
+    const CATS = finalDb.categories || [];
+    const ITEMS = finalDb.items || [];
 
 
     const [showTable, setShowTable] = useState(false);
@@ -165,12 +170,13 @@ export default function MenuPage() {
             {/* TOP BAR */}
             <div className={styles.topBar}>
                 <div className={styles.topLeft}>
-                    <Link to="/admin" className={styles.iconBtn} title="Admin Panel"><i className="fa-solid fa-sliders" /></Link>
+                    <button onClick={() => navigate(-1)} className={styles.iconBtn} title="Geri"><i className="fa-solid fa-arrow-left" /></button>
                 </div>
                 <div className={styles.topRight}>
                     <button className={styles.iconBtn} onClick={() => { setSearchOpen(p => !p); setTimeout(() => searchRef.current?.focus(), 200); }}>
                         <i className={`fa-solid fa-${searchOpen ? 'xmark' : 'magnifying-glass'}`} />
                     </button>
+                    <Link to="/admin" className={styles.iconBtn} title="Admin Panel"><i className="fa-solid fa-user-gear" /></Link>
                 </div>
             </div>
 
