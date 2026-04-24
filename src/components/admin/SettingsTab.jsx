@@ -71,16 +71,16 @@ export default function SettingsTab({ showToast }) {
 
 function ToggleRow({ label, checked, onChange }) {
     return (
-        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 0',borderBottom:'1px solid var(--border)'}}>
-            <span style={{fontSize:14,color:'var(--text)'}}>{label}</span>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'12px 0',borderBottom:'1px solid var(--border)'}}>
+            <span style={{fontSize:14,color:'var(--text)',fontWeight:500}}>{label}</span>
             <button onClick={() => onChange(!checked)} style={{
-                width:44,height:24,borderRadius:12,border:'none',cursor:'pointer',position:'relative',
-                background: checked ? 'linear-gradient(135deg,#7c5cfc,#9b7bff)' : 'var(--card2)',
-                transition:'all .2s ease'
+                width:48,height:26,borderRadius:13,border:'none',cursor:'pointer',position:'relative',
+                background: checked ? 'var(--accent)' : 'var(--border)',
+                transition:'all .3s ease'
             }}>
                 <span style={{
-                    position:'absolute',top:3,width:18,height:18,borderRadius:'50%',background:'#fff',
-                    left: checked ? 23 : 3, transition:'left .2s ease',boxShadow:'0 1px 4px rgba(0,0,0,.3)'
+                    position:'absolute',top:3,width:20,height:20,borderRadius:'50%',background:'#fff',
+                    left: checked ? 25 : 3, transition:'left .3s cubic-bezier(0.4, 0, 0.2, 1)',boxShadow:'0 2px 5px rgba(0,0,0,0.15)'
                 }} />
             </button>
         </div>

@@ -21,7 +21,7 @@ export default function CartSheet({ items, restaurant }) {
             return item ? `• ${item.name} x${cart[id]} = ${(item.price * cart[id]).toFixed(2)} ₼` : '';
         }).filter(Boolean);
         const msg = encodeURIComponent(`🍽️ Sifariş – Masa #${tableNumber}\n\n${lines.join('\n')}\n\nÜmumi: ${total.toFixed(2)} ₼`);
-        window.open(`https://wa.me/${restaurant?.whatsapp || '994501234567'}?text=${msg}`, '_blank');
+        window.open(`https://wa.me/${restaurant?.whatsapp || '994554772779'}?text=${msg}`, '_blank');
     };
 
     return (

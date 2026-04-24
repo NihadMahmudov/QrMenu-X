@@ -181,7 +181,7 @@ export default function LandingPage() {
                     <p>Bir neçə dəqiqə içində restoranınızı rəqəmsallaşdırın.</p>
                     <div className={styles.ctaActions}>
                         <Link to="/admin" className={styles.primaryBtn}>Qeydiyyatdan Keç</Link>
-                        <a href="https://wa.me/994552858990" target="_blank" className={styles.whatsappBtn}>
+                        <a href="https://wa.me/994554772779" target="_blank" className={styles.whatsappBtn}>
                             <i className="fa-brands fa-whatsapp" /> WhatsApp ilə əlaqə
                         </a>
                     </div>

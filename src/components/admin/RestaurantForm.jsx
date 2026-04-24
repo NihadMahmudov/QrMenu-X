@@ -95,7 +95,7 @@ export default function RestaurantForm({ showToast, onFormChange }) {
                 <div className={s.card}>
                     <h3 className={s.cardTitle}><i className="fa-solid fa-phone" /> Əlaqə</h3>
                     <div className={s.field}><label>Telefon</label><div className={s.inp}><input placeholder="+994 50 123 45 67" value={form.phone || ''} onChange={e => set('phone', e.target.value)} /></div></div>
-                    <div className={s.field}><label>WhatsApp</label><div className={s.inp}><input placeholder="994501234567" value={form.whatsapp || ''} onChange={e => set('whatsapp', e.target.value)} /></div></div>
+                    <div className={s.field}><label>WhatsApp</label><div className={s.inp}><input placeholder="994554772779" value={form.whatsapp || ''} onChange={e => set('whatsapp', e.target.value)} /></div></div>
                     <div className={s.field}><label>Ünvan</label><div className={s.inp}><input placeholder="Küçə, Şəhər" value={form.address || ''} onChange={e => set('address', e.target.value)} /></div></div>
                 </div>
 

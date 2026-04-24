@@ -204,7 +204,7 @@ export default function AdminPage() {
                     {showLivePreview && (
                         <div className={styles.livePreview}>
                             <div className={styles.previewPhone}>
-                                <iframe src="/menu" className={styles.previewFrame} />
+                                <iframe src={`/menu?preview=true&tab=${tab}`} className={styles.previewFrame} />
                             </div>
                         </div>
                     )}

@@ -203,7 +203,7 @@ export default function ItemsTab({ showToast }) {
             {confirm && (
                 <div className={s.confirmOverlay} onClick={() => setConfirm(null)}>
                     <div className={s.confirmBox} onClick={e => e.stopPropagation()}>
-                        <i className="fa-solid fa-triangle-exclamation" style={{ color: '#ef4444', fontSize: 36, display: 'block', marginBottom: 12 }} />
+                        <i className={`fa-solid fa-triangle-exclamation ${s.warningIcon}`} />
                         <h3>Silmək istədiyinizə əminsiniz?</h3>
                         <p>Bu əməliyyat geri qaytarıla bilməz.</p>
                         <div className={s.confirmBtns}>

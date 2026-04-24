@@ -12,10 +12,27 @@ html {
     scroll-behavior: smooth;
 }
 
+:root {
+    --primary: #059669;
+    --primary-glow: rgba(5, 150, 105, 0.15);
+    --secondary: #D97706;
+    --secondary-glow: rgba(217, 119, 6, 0.1);
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --card-hover: #F1F5F9;
+    --border: #E2E8F0;
+    --text: #0F172A;
+    --muted: #64748B;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 24px;
+    --tr: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #0D0D0D;
-    color: #F0F0F0;
+    background: var(--bg);
+    color: var(--text);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
 }
@@ -44,6 +61,6 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.15);
+    background: rgba(0,0,0,0.1);
     border-radius: 2px;
 }

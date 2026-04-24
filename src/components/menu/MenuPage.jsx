@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { useCart } from '../../context/CartContext';
 import { useToast } from '../../hooks/useToast';
@@ -126,6 +126,9 @@ export default function MenuPage() {
     const [searchOpen, setSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('');
+    const [searchParams] = useSearchParams();
+    const isPreviewMode = searchParams.get('preview') === 'true';
+    const previewTab = searchParams.get('tab');
     const searchRef = useRef(null);
 
     // Active categories (only those with items)
@@ -168,17 +171,19 @@ export default function MenuPage() {
     return (
         <div className={styles.page}>
             {/* TOP BAR */}
-            <div className={styles.topBar}>
-                <div className={styles.topLeft}>
-                    <button onClick={() => navigate(-1)} className={styles.iconBtn} title="Geri"><i className="fa-solid fa-arrow-left" /></button>
+            {!isPreviewMode && (
+                <div className={styles.topBar}>
+                    <div className={styles.topLeft}>
+                        <button onClick={() => navigate(-1)} className={styles.iconBtn} title="Geri"><i className="fa-solid fa-arrow-left" /></button>
+                    </div>
+                    <div className={styles.topRight}>
+                        <button className={styles.iconBtn} onClick={() => { setSearchOpen(p => !p); setTimeout(() => searchRef.current?.focus(), 200); }}>
+                            <i className={`fa-solid fa-${searchOpen ? 'xmark' : 'magnifying-glass'}`} />
+                        </button>
+                        <Link to="/admin" className={styles.iconBtn} title="Admin Panel"><i className="fa-solid fa-user-gear" /></Link>
+                    </div>
                 </div>
-                <div className={styles.topRight}>
-                    <button className={styles.iconBtn} onClick={() => { setSearchOpen(p => !p); setTimeout(() => searchRef.current?.focus(), 200); }}>
-                        <i className={`fa-solid fa-${searchOpen ? 'xmark' : 'magnifying-glass'}`} />
-                    </button>
-                    <Link to="/admin" className={styles.iconBtn} title="Admin Panel"><i className="fa-solid fa-user-gear" /></Link>
-                </div>
-            </div>
+            )}
 
             {/* SEARCH BAR */}
             {searchOpen && (
@@ -192,37 +197,39 @@ export default function MenuPage() {
             )}
 
             {/* HERO */}
-            <header className={styles.hero}>
-                <div className={styles.heroCover}>
-                    <img src={R.coverUrl || FALLBACK_COVER} alt="" className={styles.heroBg} aria-hidden="true" onError={e => e.target.src = FALLBACK_COVER} />
-                    <img src={R.coverUrl || FALLBACK_COVER} alt="Cover" className={styles.heroImg} onError={e => e.target.src = FALLBACK_COVER} />
-                    <div className={styles.heroOverlay} />
-                </div>
-                <div className={styles.heroContent}>
-                    <div className={styles.logoWrap}>
-                        <img src={R.logoUrl || FALLBACK_LOGO} alt="Logo" onError={e => e.target.src = FALLBACK_LOGO} />
+            {(!isPreviewMode || previewTab === 'restaurant') && (
+                <header className={styles.hero}>
+                    <div className={styles.heroCover}>
+                        <img src={R.coverUrl || FALLBACK_COVER} alt="" className={styles.heroBg} aria-hidden="true" onError={e => e.target.src = FALLBACK_COVER} />
+                        <img src={R.coverUrl || FALLBACK_COVER} alt="Cover" className={styles.heroImg} onError={e => e.target.src = FALLBACK_COVER} />
+                        <div className={styles.heroOverlay} />
                     </div>
-                    <h1 className={styles.heroName}>{R.name || 'Restoran'}</h1>
-                    <p className={styles.heroTagline}>{R.tagline || ''}</p>
-                    <div className={styles.badges}>
-                        {R.rating && <div className={styles.badge}><i className="fa-solid fa-star" /><span>{R.rating}</span></div>}
-                        {R.hours && <div className={styles.badge}><i className="fa-solid fa-clock" /><span>{R.hours}</span></div>}
-                        {R.wifi && <div className={styles.badge}><i className="fa-solid fa-wifi" /><span>{R.wifi}</span></div>}
-                        <div className={`${styles.badge} ${styles.tableBadge}`} onClick={() => setShowTable(true)}>
-                            <i className="fa-solid fa-chair" />
-                            <span>{tableNumber ? `Masa #${tableNumber}` : 'Masa seç'}</span>
+                    <div className={styles.heroContent}>
+                        <div className={styles.logoWrap}>
+                            <img src={R.logoUrl || FALLBACK_LOGO} alt="Logo" onError={e => e.target.src = FALLBACK_LOGO} />
+                        </div>
+                        <h1 className={styles.heroName}>{R.name || 'Restoran'}</h1>
+                        <p className={styles.heroTagline}>{R.tagline || ''}</p>
+                        <div className={styles.badges}>
+                            {R.rating && <div className={styles.badge}><i className="fa-solid fa-star" /><span>{R.rating}</span></div>}
+                            {R.hours && <div className={styles.badge}><i className="fa-solid fa-clock" /><span>{R.hours}</span></div>}
+                            {R.wifi && <div className={styles.badge}><i className="fa-solid fa-wifi" /><span>{R.wifi}</span></div>}
+                            <div className={`${styles.badge} ${styles.tableBadge}`} onClick={() => setShowTable(true)}>
+                                <i className="fa-solid fa-chair" />
+                                <span>{tableNumber ? `Masa #${tableNumber}` : 'Masa seç'}</span>
+                            </div>
+                        </div>
+                        <div className={styles.heroActions}>
+                            {R.phone && <a href={`tel:${R.phone}`} className={styles.actionBtn}><i className="fa-solid fa-phone" /> Zəng et</a>}
+                            {R.address && <a href={`https://maps.google.com?q=${encodeURIComponent(R.address)}`} target="_blank" rel="noreferrer" className={styles.actionBtn}><i className="fa-solid fa-location-dot" /> Ünvan</a>}
                         </div>
                     </div>
-                    <div className={styles.heroActions}>
-                        {R.phone && <a href={`tel:${R.phone}`} className={styles.actionBtn}><i className="fa-solid fa-phone" /> Zəng et</a>}
-                        {R.address && <a href={`https://maps.google.com?q=${encodeURIComponent(R.address)}`} target="_blank" rel="noreferrer" className={styles.actionBtn}><i className="fa-solid fa-location-dot" /> Ünvan</a>}
-                    </div>
-                </div>
-            </header>
+                </header>
+            )}
 
             {/* CATEGORY NAV */}
             {!searchResults && activeCats.length > 0 && (
-                <nav className={styles.catNav}>
+                <nav className={`${styles.catNav} ${isPreviewMode ? styles.catNavPreview : ''}`}>
                     <ul>
                         {activeCats.map(cat => (
                             <li key={cat.id}>
@@ -236,7 +243,7 @@ export default function MenuPage() {
             )}
 
             {/* PROMO BANNER */}
-            {isDemo ? (
+            {!isPreviewMode && (isDemo ? (
                 <div className={styles.promo} style={{ background: 'linear-gradient(135deg, rgba(255,140,66,.15), rgba(255,200,66,.1))', borderColor: 'rgba(255,140,66,.3)' }}>
                     <i className="fa-solid fa-circle-info" style={{ color: '#FF8C42' }} />
                     <div><strong>Göstəriş Rejimi (Demo)</strong><span>Siz hazırda test məlumatlarını görürsünüz. Öz menyunuzu yaratmaq üçün admin panelə keçin.</span></div>
@@ -248,7 +255,7 @@ export default function MenuPage() {
                     <div><strong>Xüsusi Məlumat</strong><span>Sifarişinizə 10% servis haqqı əlavə edilir</span></div>
                     <span className={styles.promoTag}>Məlumat</span>
                 </div>
-            )}
+            ))}
 
             {/* MENU */}
             <main className={styles.menu}>
@@ -290,7 +297,7 @@ export default function MenuPage() {
             </main>
 
             {/* CART */}
-            <CartSheet items={ITEMS} restaurant={R} />
+            {!isPreviewMode && <CartSheet items={ITEMS} restaurant={R} />}
 
             {/* MODALS */}
 
