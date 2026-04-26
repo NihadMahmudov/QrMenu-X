@@ -1,15 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './LandingPage.module.css';
 
 export default function LandingPage() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [activeStep, setActiveStep] = useState(1);
+
+    useEffect(() => {
+        const getDelay = (step) => {
+            if (step === 3) return 8000;
+            return 5000;
+        };
+
+        const timer = setTimeout(() => {
+            setActiveStep(current => (current % 3) + 1);
+        }, getDelay(activeStep));
+
+        return () => clearTimeout(timer);
+    }, [activeStep]);
+
     return (
         <div className={styles.landing}>
             {/* Navbar */}
             <nav className={styles.navbar}>
                 <div className={styles.logo}>
-                    <i className="fa-solid fa-qrcode" /> QR Menyu
+                    <img src="/logo.png" alt="QR Menyu Logo" className={styles.logoImg} />
+                    <span>QR Menyu</span>
                 </div>
                 <button className={styles.menuToggle} onClick={() => setMenuOpen(!menuOpen)}>
                     <i className={`fa-solid fa-${menuOpen ? 'xmark' : 'bars'}`} />
@@ -28,9 +44,9 @@ export default function LandingPage() {
                 <div className={styles.heroGlow}></div>
                 <div className={styles.heroContent}>
                     <div className={styles.badge}>🚀 Restoranınız üçün Rəqəmsal Gələcək</div>
-                    <h1 className={styles.title}>Rəqəmsal Menyu ilə<br/>Müştəri Təcrübəsini <span className={styles.highlight}>Yeniləyin</span></h1>
+                    <h1 className={styles.title}>Rəqəmsal Menyu ilə<br />Müştəri Təcrübəsini <span className={styles.highlight}>Yeniləyin</span></h1>
                     <p className={styles.subtitle}>
-                        Müştəriləriniz mobil telefonlarından saniyələr içində menyunuza daxil olsun. 
+                        Müştəriləriniz mobil telefonlarından saniyələr içində menyunuza daxil olsun.
                         Kağız menyu xərclərinə son qoyun və restoranınızı bir addım öndə aparın.
                     </p>
                     <div className={styles.heroActions}>
@@ -46,15 +62,21 @@ export default function LandingPage() {
                 {/* Floating Mockup */}
                 <div className={styles.heroImageWrap}>
                     <div className={styles.mockup}>
-                         <div className={styles.mockupHeader}>
-                             <div className={styles.mockupCircle}></div>
-                         </div>
-                         <div className={styles.mockupBody}>
-                             <div className={styles.mockupBar}></div>
-                             <div className={styles.mockupItem}></div>
-                             <div className={styles.mockupItem}></div>
-                             <div className={styles.mockupItem}></div>
-                         </div>
+                        <div className={styles.mockupHeader}>
+                            <div className={styles.mockupTitleWrap}>
+                                <div className={styles.mockupTitleSmall}>QR Menyu'ya</div>
+                                <div className={styles.mockupTitleLarge}>Xoş Gəldiniz!</div>
+                            </div>
+                            <div className={styles.mockupCircle}>
+                                <img src="/logo.png" alt="Logo" />
+                            </div>
+                        </div>
+                        <div className={styles.mockupBody}>
+
+                            <div className={styles.mockupItem}></div>
+                            <div className={styles.mockupItem}></div>
+                            <div className={styles.mockupItem}></div>
+                        </div>
                     </div>
                     <div className={styles.floatingCard}>
                         <i className="fa-solid fa-check-circle" />
@@ -91,21 +113,152 @@ export default function LandingPage() {
             {/* How It Works */}
             <section id="how" className={styles.howItWorks}>
                 <h2 className={styles.sectionTitle}>Necə İşləyir?</h2>
-                <div className={styles.stepsGrid}>
-                    <div className={styles.stepCard}>
-                        <div className={styles.stepNum}>1</div>
-                        <h3>Menyunuzu Yaradın</h3>
-                        <p>Yeməkləri, şəkilləri və qiymətləri asanlıqla panelimizdən əlavə edin.</p>
+
+                <div className={styles.howContent}>
+                    <div className={styles.processVisual}>
+                        <div className={styles.processAnimationContainer}>
+                            <div className={styles.animMockup}>
+                                <div className={styles.mockupNotch}></div>
+                                <div className={styles.animMockupScreen}>
+                                    {/* Registration Stage */}
+                                    <div className={`${styles.stage} ${activeStep === 1 ? styles.stageActive : ''}`}>
+                                        <div className={styles.mockupHeaderLogo}>
+                                            <i className="fa-solid fa-qrcode" /> QR Menyu
+                                        </div>
+                                        <div className={styles.stageContent}>
+                                            <div className={styles.mockInp}>
+                                                <span className={styles.typingText1}>Baku Steak House</span>
+                                                <div className={styles.cursor}></div>
+                                            </div>
+                                            <div className={styles.mockInp}>
+                                                <span className={styles.typingText2}>info@bakusteak.az</span>
+                                                <div className={styles.cursor}></div>
+                                            </div>
+                                            <div className={styles.mockBtn}>Hesab Yarat</div>
+                                            <div className={styles.checkWrap}>
+                                                <i className={`fa-solid fa-circle-check ${styles.checkIcon}`} />
+                                                <span>Uğurlu!</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* Menu Creation Stage */}
+                                    <div className={`${styles.stage} ${activeStep === 2 ? styles.stageActive : ''}`}>
+                                        <div className={styles.mockupHeaderLogo}>
+                                            <i className="fa-solid fa-qrcode" /> QR Menyu
+                                        </div>
+                                        <div className={styles.mockupProfile}>
+                                            <div className={styles.mockupAvatar}>🥩</div>
+                                            <div className={styles.mockupProfileInfo}>
+                                                <b>Baku Steak House</b>
+                                                <span>İdarəetmə Paneli</span>
+                                            </div>
+                                        </div>
+                                        <div className={styles.stageContent}>
+                                            <div className={styles.mockItemCard}>
+                                                <div className={styles.mockItemImg}>🍕</div>
+                                                <div className={styles.mockItemText}><b>Margarita Pizza</b><span>12.00 ₼</span></div>
+                                            </div>
+                                            <div className={styles.mockItemCard}>
+                                                <div className={styles.mockItemImg}>🍔</div>
+                                                <div className={styles.mockItemText}><b>Classic Burger</b><span>9.50 ₼</span></div>
+                                            </div>
+                                            <div className={styles.mockItemCard}>
+                                                <div className={styles.mockItemImg}>🥗</div>
+                                                <div className={styles.mockItemText}><b>Sezar Salatı</b><span>8.00 ₼</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* Scanning Stage */}
+                                    <div className={`${styles.stage} ${activeStep === 3 ? styles.stageActive : ''}`}>
+                                        <div className={styles.stageContent}>
+                                            <div className={styles.qrBox}>
+                                                <i className="fa-solid fa-qrcode" />
+                                                <div className={styles.scanLine}></div>
+                                            </div>
+                                            <div className={styles.scanSuccess}>
+                                                <div className={styles.successBadge}>Müştəri Baxışı</div>
+                                                <div className={styles.miniMenu}>
+                                                    <div className={styles.miniScrollList}>
+                                                        <div className={styles.miniItemCard}><div className={styles.miniImg}>🍔</div><div className={styles.miniInfo}><div className={styles.miniTitle}>Burger</div><div className={styles.miniPrice}>9.50 ₼</div></div></div>
+                                                        <div className={styles.miniItemCard}><div className={styles.miniImg}>🍕</div><div className={styles.miniInfo}><div className={styles.miniTitle}>Pizza</div><div className={styles.miniPrice}>12.00 ₼</div></div></div>
+                                                        <div className={styles.miniItemCard}><div className={styles.miniImg}>🥗</div><div className={styles.miniInfo}><div className={styles.miniTitle}>Salat</div><div className={styles.miniPrice}>8.00 ₼</div></div></div>
+                                                        <div className={styles.miniItemCard}><div className={styles.miniImg}>🍟</div><div className={styles.miniInfo}><div className={styles.miniTitle}>Fri</div><div className={styles.miniPrice}>4.50 ₼</div></div></div>
+                                                        <div className={styles.miniItemCard}><div className={styles.miniImg}>🥤</div><div className={styles.miniInfo}><div className={styles.miniTitle}>Cola</div><div className={styles.miniPrice}>3.00 ₼</div></div></div>
+                                                        <div className={styles.miniItemCard}><div className={styles.miniImg}>🍰</div><div className={styles.miniInfo}><div className={styles.miniTitle}>Şirniyyat</div><div className={styles.miniPrice}>7.00 ₼</div></div></div>
+                                                        <div className={styles.miniItemCard}><div className={styles.miniImg}>☕</div><div className={styles.miniInfo}><div className={styles.miniTitle}>Kofe</div><div className={styles.miniPrice}>5.50 ₼</div></div></div>
+                                                        {/* Duplicate for seamless loop */}
+                                                        <div className={styles.miniItemCard}><div className={styles.miniImg}>🍔</div><div className={styles.miniInfo}><div className={styles.miniTitle}>Burger</div><div className={styles.miniPrice}>9.50 ₼</div></div></div>
+                                                        <div className={styles.miniItemCard}><div className={styles.miniImg}>🍕</div><div className={styles.miniInfo}><div className={styles.miniTitle}>Pizza</div><div className={styles.miniPrice}>12.00 ₼</div></div></div>
+                                                    </div>
+                                                    <div className={styles.scrollTouch}></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={styles.stepProgressContainer}>
+                            <div className={`${styles.progressBar} ${activeStep === 1 ? styles.progressActive : ''}`} style={{ '--dur': '5s' }}></div>
+                            <div className={`${styles.progressBar} ${activeStep === 2 ? styles.progressActive : ''}`} style={{ '--dur': '5s' }}></div>
+                            <div className={`${styles.progressBar} ${activeStep === 3 ? styles.progressActive : ''}`} style={{ '--dur': '8s' }}></div>
+                        </div>
                     </div>
-                    <div className={styles.stepCard}>
-                        <div className={styles.stepNum}>2</div>
-                        <h3>QR Kodunuzu Alın</h3>
-                        <p>Restoranınıza uyğun xüsusi QR kodu dizayn edin və yükləyin.</p>
-                    </div>
-                    <div className={styles.stepCard}>
-                        <div className={styles.stepNum}>3</div>
-                        <h3>Müştəriləriniz Skan etsin</h3>
-                        <p>Müştərilər kameranı yaxınlaşdıraraq anında menyunu görsünlər.</p>
+
+                    <div className={styles.stepRows}>
+                        {/* Step 1 Row */}
+                        <div className={styles.stepRow}>
+                            <div className={`${styles.stepCard} ${activeStep === 1 ? styles.stepActive : ''}`} onClick={() => setActiveStep(1)}>
+                                <div className={styles.stepNum}>1</div>
+                                <div className={styles.stepText}>
+                                    <h3>Qeydiyyatdan Keçin</h3>
+                                    <p>Saniyələr içində hesabınızı yaradın və restoran məlumatlarını daxil edin.</p>
+                                </div>
+                            </div>
+                            <div className={styles.indicatorWrap}>
+                                <div className={`${styles.processStep} ${activeStep === 1 ? styles.stepIconActive : ''}`} onClick={() => setActiveStep(1)}>
+                                    <div className={styles.stepIcon}><i className="fa-solid fa-user-plus" /></div>
+                                    <div className={styles.stepLabel}>Qeydiyyat</div>
+                                </div>
+                                <div className={styles.processLineVertical}></div>
+                            </div>
+                        </div>
+
+                        {/* Step 2 Row */}
+                        <div className={styles.stepRow}>
+                            <div className={`${styles.stepCard} ${activeStep === 2 ? styles.stepActive : ''}`} onClick={() => setActiveStep(2)}>
+                                <div className={styles.stepNum}>2</div>
+                                <div className={styles.stepText}>
+                                    <h3>Menyunuzu Yaradın</h3>
+                                    <p>Yeməkləri, şəkilləri və qiymətləri asanlıqla panelimizdən əlavə edin.</p>
+                                </div>
+                            </div>
+                            <div className={styles.indicatorWrap}>
+                                <div className={`${styles.processStep} ${activeStep === 2 ? styles.stepIconActive : ''}`} onClick={() => setActiveStep(2)}>
+                                    <div className={styles.stepIcon}><i className="fa-solid fa-utensils" /></div>
+                                    <div className={styles.stepLabel}>Menyu</div>
+                                </div>
+                                <div className={styles.processLineVertical}></div>
+                            </div>
+                        </div>
+
+                        {/* Step 3 Row */}
+                        <div className={styles.stepRow}>
+                            <div className={`${styles.stepCard} ${activeStep === 3 ? styles.stepActive : ''}`} onClick={() => setActiveStep(3)}>
+                                <div className={styles.stepNum}>3</div>
+                                <div className={styles.stepText}>
+                                    <h3>QR Kodunuzu Paylaşın</h3>
+                                    <p>QR kodunuzu masalara yerləşdirin, müştərilər menyunu anında görsün.</p>
+                                </div>
+                            </div>
+                            <div className={styles.indicatorWrap}>
+                                <div className={`${styles.processStep} ${activeStep === 3 ? styles.stepIconActive : ''}`} onClick={() => setActiveStep(3)}>
+                                    <div className={styles.stepIcon}><i className="fa-solid fa-qrcode" /></div>
+                                    <div className={styles.stepLabel}>Skan</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -192,7 +345,10 @@ export default function LandingPage() {
             <footer className={styles.footer}>
                 <div className={styles.footerTop}>
                     <div className={styles.footerBrand}>
-                        <div className={styles.logo}><i className="fa-solid fa-qrcode" /> QR Menyu</div>
+                        <div className={styles.logo}>
+                            <img src="/logo.png" alt="Logo" className={styles.logoImg} />
+                            <span>QR Menyu</span>
+                        </div>
                         <p>Restoranlar üçün ən yaxşı rəqəmsal həll yolu.</p>
                     </div>
                     <div className={styles.footerLinks}>

@@ -204,12 +204,14 @@ export default function MenuPage() {
                         <img src={R.coverUrl || FALLBACK_COVER} alt="Cover" className={styles.heroImg} onError={e => e.target.src = FALLBACK_COVER} />
                         <div className={styles.heroOverlay} />
                     </div>
-                    <div className={styles.heroContent}>
-                        <div className={styles.logoWrap}>
-                            <img src={R.logoUrl || FALLBACK_LOGO} alt="Logo" onError={e => e.target.src = FALLBACK_LOGO} />
-                        </div>
-                        <h1 className={styles.heroName}>{R.name || 'Restoran'}</h1>
-                        <p className={styles.heroTagline}>{R.tagline || ''}</p>
+                        <div className={styles.heroContent}>
+                            <div className={styles.logoWrap}>
+                                <img src={R.logoUrl || FALLBACK_LOGO} alt="Logo" onError={e => e.target.src = FALLBACK_LOGO} />
+                            </div>
+                            <div className={styles.heroWelcome}>
+                                <div className={styles.welcomeSmall}>QR Menyu</div>
+                                <div className={styles.welcomeLarge}>Xoş Gəldiniz!</div>
+                            </div>
                         <div className={styles.badges}>
                             {R.rating && <div className={styles.badge}><i className="fa-solid fa-star" /><span>{R.rating}</span></div>}
                             {R.hours && <div className={styles.badge}><i className="fa-solid fa-clock" /><span>{R.hours}</span></div>}

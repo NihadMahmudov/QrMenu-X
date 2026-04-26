@@ -100,7 +100,7 @@ export default function AdminPage() {
         <div className={styles.authScreen}>
             <div className={styles.authCard}>
                 <div className={styles.brand}>
-                    <div className={styles.brandIcon}><i className="fa-solid fa-qrcode" /></div>
+                    <div className={styles.brandIcon}><img src="/logo.png" alt="Logo" /></div>
                     <h1>QR Menyu</h1>
                     <p>Restoranınız üçün rəqəmsal menyu yaradın</p>
                 </div>
@@ -139,7 +139,10 @@ export default function AdminPage() {
         <div className={`${styles.dashboard} ${sidebarOpen ? styles.sidebarOpen : ''}`}>
             <div className={styles.sidebarOverlay} onClick={() => setSidebarOpen(false)}></div>
             <aside className={styles.sidebar}>
-                <Link to="/" className={styles.sidebarBrand} title="Ana Səhifəyə Qayıt"><i className="fa-solid fa-qrcode" /><span>QR Menyu</span></Link>
+                <Link to="/" className={styles.sidebarBrand} title="Ana Səhifəyə Qayıt">
+                    <img src="/logo.png" alt="Logo" className={styles.sidebarLogo} />
+                    <span>QR Menyu</span>
+                </Link>
                 <nav className={styles.sidebarNav}>
                     {tabs.map(t => (
                         <button key={t.id} className={`${styles.navBtn} ${tab === t.id ? styles.navActive : ''}`} onClick={() => { handleTabSwitch(t.id); setSidebarOpen(false); }}>
