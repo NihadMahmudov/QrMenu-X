@@ -2,10 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { useCart } from '../../context/CartContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../hooks/useToast';
 import { loadActiveDB } from '../../utils/storage';
 import CartSheet from '../cart/CartSheet';
 import ItemModal from './ItemModal';
+import LanguageSelector from '../shared/LanguageSelector';
 import Toast from '../shared/Toast';
 import styles from './MenuPage.module.css';
 
@@ -16,6 +18,7 @@ export default function MenuPage() {
     const navigate = useNavigate();
     const { db: contextDb, ownerEmail } = useData();
     const { addToCart, setTableNumber, tableNumber } = useCart();
+    const { t, lang, setLang } = useLanguage();
     const { message, visible, showToast } = useToast();
 
     // Load from active owner's data (or context if available)
@@ -131,42 +134,35 @@ export default function MenuPage() {
     const previewTab = searchParams.get('tab');
     const searchRef = useRef(null);
 
-    // Active categories (only those with items)
-    const activeCats = CATS.filter(cat => ITEMS.some(i => i.catId === cat.id));
+    // Categories with "All" added at the start
+    const allCategory = { id: 'all', name: t('all'), emoji: '🏠' };
+    const activeCats = [allCategory, ...CATS.filter(cat => ITEMS.some(i => i.catId === cat.id))];
+
+    // Initial category
+    useEffect(() => {
+        if (!activeCategory) setActiveCategory('all');
+    }, [activeCategory]);
 
     // Search
     const searchResults = searchQuery
         ? ITEMS.filter(i => i.name.toLowerCase().includes(searchQuery.toLowerCase()) || (i.desc || '').toLowerCase().includes(searchQuery.toLowerCase()))
         : null;
 
-    // Scroll spy
-    useEffect(() => {
-        const handler = () => {
-            const sections = document.querySelectorAll('[data-section]');
-            let current = '';
-            sections.forEach(sec => { if (window.scrollY >= sec.offsetTop - 120) current = sec.dataset.section; });
-            setActiveCategory(current);
-        };
-        window.addEventListener('scroll', handler, { passive: true });
-        return () => window.removeEventListener('scroll', handler);
-    }, []);
-
-    const scrollToSection = (catId) => {
-        const el = document.querySelector(`[data-section="${catId}"]`);
-        if (el) window.scrollTo({ top: el.offsetTop - 110, behavior: 'smooth' });
-    };
-
     const handleAddToCart = (item) => {
         addToCart(item.id);
-        showToast('✅ Səbətə əlavə edildi');
+        showToast(`✅ ${t('added_to_cart')}`);
     };
 
     const confirmTable = () => {
-        if (!tableInput || tableInput < 1) { showToast('⚠️ Düzgün nömrə daxil edin'); return; }
+        if (!tableInput || tableInput < 1) { showToast(`⚠️ ${t('invalid_number')}`); return; }
         setTableNumber(tableInput);
         setShowTable(false);
-        showToast(`✅ Masa #${tableInput} seçildi`);
+        showToast(`✅ ${t('table')} #${tableInput} ${t('table_selected')}`);
     };
+
+    const filteredItems = activeCategory === 'all' 
+        ? ITEMS 
+        : ITEMS.filter(item => item.catId === activeCategory);
 
     return (
         <div className={styles.page}>
@@ -180,6 +176,7 @@ export default function MenuPage() {
                         <button className={styles.iconBtn} onClick={() => { setSearchOpen(p => !p); setTimeout(() => searchRef.current?.focus(), 200); }}>
                             <i className={`fa-solid fa-${searchOpen ? 'xmark' : 'magnifying-glass'}`} />
                         </button>
+                        <LanguageSelector />
                         <Link to="/admin" className={styles.iconBtn} title="Admin Panel"><i className="fa-solid fa-user-gear" /></Link>
                     </div>
                 </div>
@@ -190,7 +187,7 @@ export default function MenuPage() {
                 <div className={styles.searchBar}>
                     <div className={styles.searchWrap}>
                         <i className="fa-solid fa-magnifying-glass" />
-                        <input ref={searchRef} type="text" placeholder="Yemək axtar..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
+                        <input ref={searchRef} type="text" placeholder={t('search_food')} value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
                         {searchQuery && <button onClick={() => setSearchQuery('')}><i className="fa-solid fa-xmark" /></button>}
                     </div>
                 </div>
@@ -204,13 +201,19 @@ export default function MenuPage() {
                         <img src={R.coverUrl || FALLBACK_COVER} alt="Cover" className={styles.heroImg} onError={e => e.target.src = FALLBACK_COVER} />
                         <div className={styles.heroOverlay} />
                     </div>
-                        <div className={styles.heroContent}>
+                            <div className={styles.heroContent}>
                             <div className={styles.logoWrap}>
-                                <img src={R.logoUrl || FALLBACK_LOGO} alt="Logo" onError={e => e.target.src = FALLBACK_LOGO} />
+                                {R.logoUrl ? (
+                                    <img src={R.logoUrl} alt="Logo" onError={e => { e.target.style.display = 'none'; e.target.parentElement.classList.add(styles.logoWithIcon); }} />
+                                ) : (
+                                    <div className={styles.logoIconFallback}>
+                                        <i className="fa-solid fa-utensils" />
+                                    </div>
+                                )}
                             </div>
                             <div className={styles.heroWelcome}>
-                                <div className={styles.welcomeSmall}>QR Menyu</div>
-                                <div className={styles.welcomeLarge}>Xoş Gəldiniz!</div>
+                                <div className={styles.welcomeSmall}>{R.name || 'QR Menyu'}</div>
+                                <div className={styles.welcomeLarge}>{R.tagline || t('welcome_tag')}</div>
                             </div>
                         <div className={styles.badges}>
                             {R.rating && <div className={styles.badge}><i className="fa-solid fa-star" /><span>{R.rating}</span></div>}
@@ -218,12 +221,12 @@ export default function MenuPage() {
                             {R.wifi && <div className={styles.badge}><i className="fa-solid fa-wifi" /><span>{R.wifi}</span></div>}
                             <div className={`${styles.badge} ${styles.tableBadge}`} onClick={() => setShowTable(true)}>
                                 <i className="fa-solid fa-chair" />
-                                <span>{tableNumber ? `Masa #${tableNumber}` : 'Masa seç'}</span>
+                                <span>{tableNumber ? `${t('table')} #${tableNumber}` : t('select_table')}</span>
                             </div>
                         </div>
                         <div className={styles.heroActions}>
-                            {R.phone && <a href={`tel:${R.phone}`} className={styles.actionBtn}><i className="fa-solid fa-phone" /> Zəng et</a>}
-                            {R.address && <a href={`https://maps.google.com?q=${encodeURIComponent(R.address)}`} target="_blank" rel="noreferrer" className={styles.actionBtn}><i className="fa-solid fa-location-dot" /> Ünvan</a>}
+                            {R.phone && <a href={`tel:${R.phone}`} className={styles.actionBtn}><i className="fa-solid fa-phone" /> {t('call')}</a>}
+                            {R.address && <a href={`https://maps.google.com?q=${encodeURIComponent(R.address)}`} target="_blank" rel="noreferrer" className={styles.actionBtn}><i className="fa-solid fa-location-dot" /> {t('address')}</a>}
                         </div>
                     </div>
                 </header>
@@ -235,7 +238,7 @@ export default function MenuPage() {
                     <ul>
                         {activeCats.map(cat => (
                             <li key={cat.id}>
-                                <button className={`${styles.catLink} ${activeCategory === cat.id ? styles.catLinkActive : ''}`} onClick={() => scrollToSection(cat.id)}>
+                                <button className={`${styles.catLink} ${activeCategory === cat.id ? styles.catLinkActive : ''}`} onClick={() => setActiveCategory(cat.id)}>
                                     {cat.emoji} {cat.name}
                                 </button>
                             </li>
@@ -248,14 +251,14 @@ export default function MenuPage() {
             {!isPreviewMode && (isDemo ? (
                 <div className={styles.promo} style={{ background: 'linear-gradient(135deg, rgba(255,140,66,.15), rgba(255,200,66,.1))', borderColor: 'rgba(255,140,66,.3)' }}>
                     <i className="fa-solid fa-circle-info" style={{ color: '#FF8C42' }} />
-                    <div><strong>Göstəriş Rejimi (Demo)</strong><span>Siz hazırda test məlumatlarını görürsünüz. Öz menyunuzu yaratmaq üçün admin panelə keçin.</span></div>
-                    <Link to="/admin" className={styles.promoTag} style={{ background: '#FF8C42', textDecoration: 'none' }}>Adminə Keç</Link>
+                    <div><strong>{t('demo_mode')}</strong><span>{t('demo_desc')}</span></div>
+                    <Link to="/admin" className={styles.promoTag} style={{ background: '#FF8C42', textDecoration: 'none' }}>{t('go_admin')}</Link>
                 </div>
             ) : (
                 <div className={styles.promo}>
                     <i className="fa-solid fa-fire" />
-                    <div><strong>Xüsusi Məlumat</strong><span>Sifarişinizə 10% servis haqqı əlavə edilir</span></div>
-                    <span className={styles.promoTag}>Məlumat</span>
+                    <div><strong>{t('special_info')}</strong><span>{t('service_fee')}</span></div>
+                    <span className={styles.promoTag}>{t('info')}</span>
                 </div>
             ))}
 
@@ -264,13 +267,13 @@ export default function MenuPage() {
                 {ITEMS.length === 0 && (
                     <div style={{ textAlign: 'center', padding: '60px 20px', color: '#888' }}>
                         <i className="fa-solid fa-utensils" style={{ fontSize: 48, opacity: 0.15, marginBottom: 16, display: 'block' }} />
-                        <p>Menyu hələ boşdur</p>
+                        <p>{t('menu_empty')}</p>
                     </div>
                 )}
                 {searchResults ? (
                     <section className={styles.section}>
                         <div className={styles.sectionHeader}>
-                            <span className={styles.sectionTitle}>🔍 Nəticələr ({searchResults.length})</span>
+                            <span className={styles.sectionTitle}>🔍 {t('results')} ({searchResults.length})</span>
                             <div className={styles.sectionLine} />
                         </div>
                         <div className={styles.grid}>
@@ -279,23 +282,25 @@ export default function MenuPage() {
                             ))}
                         </div>
                     </section>
-                ) : activeCats.map(cat => {
-                    const catItems = ITEMS.filter(i => i.catId === cat.id);
-                    if (!catItems.length) return null;
-                    return (
-                        <section key={cat.id} className={styles.section} data-section={cat.id}>
-                            <div className={styles.sectionHeader}>
-                                <span className={styles.sectionTitle}>{cat.emoji} {cat.name}</span>
-                                <div className={styles.sectionLine} />
-                            </div>
-                            <div className={styles.grid}>
-                                {catItems.map(item => (
-                                    <ItemCard key={item.id} item={item} onAdd={handleAddToCart} onClick={setSelectedItem} />
-                                ))}
-                            </div>
-                        </section>
-                    );
-                })}
+                ) : (
+                    <section className={styles.section}>
+                        <div className={styles.sectionHeader}>
+                            <span className={styles.sectionTitle}>
+                                {activeCategory === 'all' 
+                                    ? `🏠 ${t('all_foods')}` 
+                                    : `${activeCats.find(c => c.id === activeCategory)?.emoji || '🍴'} ${activeCats.find(c => c.id === activeCategory)?.name || t('foods')}`
+                                } 
+                                <span style={{fontSize: '14px', opacity: 0.5, marginLeft: '8px'}}>({filteredItems.length})</span>
+                            </span>
+                            <div className={styles.sectionLine} />
+                        </div>
+                        <div className={styles.grid}>
+                            {filteredItems.map(item => (
+                                <ItemCard key={item.id} item={item} onAdd={handleAddToCart} onClick={setSelectedItem} />
+                            ))}
+                        </div>
+                    </section>
+                )}
             </main>
 
             {/* CART */}
@@ -307,13 +312,13 @@ export default function MenuPage() {
                 <div className={styles.tableOverlay} onClick={e => e.target === e.currentTarget && setShowTable(false)}>
                     <div className={styles.tableBox}>
                         <div className={styles.tableLogo}><i className="fa-solid fa-chair" /></div>
-                        <h2>Masa Nömrəniz</h2>
-                        <p>Sifarişin doğru yerə çatması üçün</p>
+                        <h2>{t('table_number')}</h2>
+                        <p>{t('table_desc')}</p>
                         <div className={styles.tableInput}>
                             <i className="fa-solid fa-hashtag" />
-                            <input type="number" placeholder="məs: 5" min="1" max="99" value={tableInput} onChange={e => setTableInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && confirmTable()} />
+                            <input type="number" placeholder={`${t('eg')} 5`} min="1" max="99" value={tableInput} onChange={e => setTableInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && confirmTable()} />
                         </div>
-                        <button className={styles.tableBtn} onClick={confirmTable}>Təsdiqlə</button>
+                        <button className={styles.tableBtn} onClick={confirmTable}>{t('confirm')}</button>
                     </div>
                 </div>
             )}
@@ -325,6 +330,11 @@ export default function MenuPage() {
 
 // Item Card — NO FAVORITE ICON
 function ItemCard({ item, onAdd, onClick }) {
+    // Demo stats for visual parity with the request
+    const time = 5;
+    const kcal = 5;
+    const rating = 4.7;
+
     return (
         <div className={styles.card} onClick={() => onClick(item)}>
             {item.badge && <div className={styles.badge2}>{item.badge}</div>}
@@ -334,8 +344,33 @@ function ItemCard({ item, onAdd, onClick }) {
             <div className={styles.cardBody}>
                 <div className={styles.cardName}>{item.name}</div>
                 <div className={styles.cardDesc}>{item.desc}</div>
+                
+                <div className={styles.itemStats}>
+                    <div className={styles.statItem}>
+                        <i className="fa-regular fa-clock" />
+                        <span>{time} dəq</span>
+                    </div>
+                    <div className={styles.statItem}>
+                        <i className="fa-solid fa-fire" />
+                        <span>{kcal} kcal</span>
+                    </div>
+                    <div className={styles.statItem}>
+                        <div className={styles.stars}>
+                            <i className="fa-solid fa-star" />
+                            <i className="fa-solid fa-star" />
+                            <i className="fa-solid fa-star" />
+                            <i className="fa-solid fa-star" />
+                            <i className="fa-solid fa-star" />
+                        </div>
+                        <span className={styles.ratingValue}>{rating}</span>
+                    </div>
+                </div>
+
                 <div className={styles.cardFooter}>
-                    <span className={styles.cardPrice}>{item.price.toFixed(2)} ₼</span>
+                    <div className={styles.priceContainer}>
+                        <span className={styles.cardPrice}>{item.price.toFixed(2)}</span>
+                        <span className={styles.currency}>AZN</span>
+                    </div>
                     <button className={styles.addBtn} onClick={e => { e.stopPropagation(); onAdd(item); }}>
                         <i className="fa-solid fa-plus" />
                     </button>

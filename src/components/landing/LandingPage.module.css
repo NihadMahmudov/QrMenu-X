@@ -5,10 +5,10 @@
     --border: #000000;
     --text: #0F172A;
     --muted: #64748B;
-    --accent: #059669;
-    --accent-light: #10B981;
-    --accent-glow: rgba(5, 150, 105, 0.1);
-    --accent2: #D97706;
+    --accent: #f15a24;
+    --accent-light: #ff8c42;
+    --accent-glow: rgba(241, 90, 36, 0.1);
+    --accent2: #ff7f32;
 }
 
 .landing {
@@ -44,11 +44,11 @@
 }
 
 .logoImg {
-    height: 40px;
     width: 40px;
+    height: 40px;
     object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid var(--accent);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--accent-glow);
 }
 
 .logo i {
@@ -133,7 +133,7 @@
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 24px;
-    border: 4px solid rgba(5, 150, 105, 0.15);
+    border: 4px solid rgba(241, 90, 36, 0.15);
 }
 
 .title {
@@ -186,8 +186,8 @@
 
 .primaryBtn:hover {
     transform: translateY(-3px);
-    border-color: #047857;
-    background: #047857;
+    border-color: #d9481b;
+    background: #d9481b;
 }
 
 .secondaryBtn {
@@ -641,18 +641,20 @@
 
 .mockupHeaderLogo {
     position: absolute;
-    top: 20px;
+    top: 14px;
     left: 0;
     right: 0;
     text-align: center;
     font-weight: 800;
-    font-size: 14px;
+    font-size: 12px;
     color: var(--text);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    z-index: 5;
+    gap: 5px;
+    z-index: 10;
+    background: rgba(255,255,255,0.9);
+    padding: 4px 0;
 }
 
 .mockupHeaderLogo i { color: var(--accent); }
@@ -664,11 +666,12 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 15px;
+    padding: 52px 15px 15px;
     opacity: 0;
-    visibility: hidden;
-    transform: translateX(30px);
-    transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    transform: translateX(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    z-index: 1;
 }
 
 .mockupProfile {
@@ -712,14 +715,23 @@
 
 .stageActive {
     opacity: 1;
-    visibility: visible;
+    pointer-events: auto;
     transform: translateX(0);
+    z-index: 2;
+}
+
+/* Stage 3 has no header, so no top padding needed */
+.stageNoHeader {
+    padding-top: 15px;
 }
 
 .stageContent {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    position: relative;
+    min-height: 280px;
+    flex: 1;
 }
 
 /* Stage Elements */
@@ -853,19 +865,20 @@
 .mockItemText span { font-size: 11px; color: var(--accent); font-weight: 700; }
 
 .qrBox {
-    width: 130px;
-    height: 130px;
+    width: 120px;
+    height: 120px;
     border: 4px solid #000;
     border-radius: 18px;
     align-self: center;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 64px;
+    font-size: 56px;
     position: relative;
     background: #fff;
     margin-top: 10px;
     transition: all 0.4s;
+    z-index: 1;
 }
 
 .stageActive .qrBox {
@@ -898,10 +911,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 15px;
+    padding: 12px 10px;
     opacity: 0;
     transform: translateY(40px);
     transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.8s;
+    z-index: 5;
+    background: #fff;
+    border-radius: 12px;
 }
 
 .stageActive .scanSuccess {
@@ -912,21 +928,23 @@
 .successBadge {
     background: var(--accent);
     color: #fff;
-    padding: 5px 14px;
+    padding: 4px 12px;
     border-radius: 50px;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     box-shadow: 0 4px 10px var(--accent-glow);
+    flex-shrink: 0;
 }
 
 .miniMenu { 
     width: 100%; 
-    height: 280px;
+    height: 200px;
     overflow: hidden;
     position: relative;
-    border-radius: 15px;
-    margin-top: 10px;
+    border-radius: 12px;
+    margin-top: 6px;
+    flex: 1;
 }
 
 .miniScrollList {
@@ -1072,6 +1090,107 @@
     line-height: 1.6;
 }
 
+/* TESTIMONIALS (What Owners Say) */
+.testimonials {
+    padding: 120px 8%;
+    background-color: #fff;
+    color: var(--text);
+    overflow: hidden;
+}
+
+.testiHeader {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.testiTitle {
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    font-family: 'Outfit', sans-serif;
+}
+
+.testiHeader p {
+    color: var(--muted);
+    font-size: 18px;
+}
+
+.testiScrollWrap {
+    width: 100%;
+}
+
+.testiGrid {
+    display: flex;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.testiCard {
+    background: #fff;
+    border: 4px solid #000;
+    border-radius: 24px;
+    padding: 40px;
+    flex: 1;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.testiCard:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+}
+
+.testiStars {
+    color: #FBBF24;
+    font-size: 18px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 5px;
+}
+
+.testiText {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+.testiAuthor {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: auto;
+}
+
+.testiAvatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.testiInfo h4 {
+    font-size: 18px;
+    margin: 0 0 4px 0;
+    color: var(--text);
+}
+
+.testiInfo span {
+    font-size: 14px;
+    color: var(--muted);
+}
+
 /* PRICING */
 .pricing {
     padding: 120px 8%;
@@ -1080,9 +1199,9 @@
 
 .pricingGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 40px;
-    max-width: 900px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -1090,7 +1209,7 @@
     background: var(--card);
     padding: 50px;
     border-radius: 32px;
-    border: 4px solid var(--border);
+    border: 4px solid #000;
     text-align: left;
     position: relative;
     display: flex;
@@ -1105,7 +1224,6 @@
 }
 
 .pricingPro {
-    border-color: var(--accent);
     background: #fff;
     box-shadow: 0 15px 35px var(--accent-glow);
 }
@@ -1378,30 +1496,42 @@
 /* RESPONSIVE */
 @media (max-width: 1024px) {
     .navbar {
-        padding: 15px 5%;
+        padding: 15px 4%;
+    }
+
+    .logo {
+        font-size: 18px;
+        gap: 8px;
+    }
+
+    .logoImg {
+        width: 32px;
+        height: 32px;
     }
 
     .navLinks {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 80%;
-        height: 100vh;
-        background: var(--card);
-        flex-direction: column;
-        padding: 100px 40px;
-        transition: 0.4s ease;
-        z-index: 999;
-        border-left: 4px solid var(--border);
+        position: static;
+        width: auto;
+        height: auto;
+        background: none;
+        flex-direction: row;
+        padding: 0;
+        border: none;
+        gap: 12px;
     }
 
-    .navActive {
-        right: 0;
+    .navLinks a, .navDemo {
+        display: none !important;
+    }
+
+    .navAdmin {
+        padding: 8px 16px;
+        font-size: 14px;
+        display: flex !important;
     }
 
     .menuToggle {
-        display: block;
-        z-index: 1001;
+        display: none;
     }
 
     .hero {
@@ -1436,12 +1566,53 @@
     }
 
     .floatingCard {
-        display: none;
+        padding: 12px 18px;
+        font-size: 14px;
+        border-width: 3px;
+        right: -10px;
+        top: 15%;
+        width: max-content;
     }
 
-    .statsContainer {
-        grid-template-columns: 1fr;
-        padding: 40px 20px;
+    .floatingCard i {
+        font-size: 16px;
+    }
+
+    .pricingGrid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding: 20px 20px 40px;
+        gap: 20px;
+        margin-inline: -5%;
+        padding-inline: 5%;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .pricingGrid::-webkit-scrollbar {
+        display: none;
+    }
+    .pricingCard {
+        min-width: 300px;
+        scroll-snap-align: center;
+        padding: 40px 30px;
+    }
+
+    .testiGrid {
+        flex-direction: row !important;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding: 20px 0;
+        margin-inline: -5%;
+        padding-inline: 5%;
+        scrollbar-width: none;
+    }
+    .testiGrid::-webkit-scrollbar {
+        display: none;
+    }
+    .testiCard {
+        min-width: 300px;
+        scroll-snap-align: center;
     }
 
     .howContent {
@@ -1515,27 +1686,328 @@
 }
 
 @media (max-width: 640px) {
+    .navbar {
+        padding: 12px 4%;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+
+    .logoImg {
+        height: 32px;
+        width: 32px;
+    }
+
+    .hero {
+        padding: 40px 4% 30px;
+        gap: 24px;
+        min-height: unset;
+    }
+
     .title {
-        font-size: 36px;
+        font-size: 32px;
+        letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+        font-size: 15px;
+        margin-bottom: 24px;
+    }
+
+    .badge {
+        padding: 6px 12px;
+        font-size: 12px;
+        margin-bottom: 16px;
     }
 
     .heroActions {
         flex-direction: column;
         width: 100%;
+        gap: 12px;
+    }
+
+    .primaryBtn,
+    .secondaryBtn {
+        padding: 13px 22px;
+        font-size: 14px;
+        justify-content: center;
+    }
+
+    .mockup {
+        width: 240px;
+        height: 420px;
+    }
+
+    .floatingCard {
+        padding: 8px 12px;
+        font-size: 11px;
+        border-width: 2px;
+        right: -10px;
+        top: 10%;
+        border-radius: 12px;
+        z-index: 5;
+        width: max-content;
+    }
+
+    .cardLower {
+        left: -10px;
+        right: auto;
+        top: auto;
+        bottom: 15%;
     }
 
     .navLinks {
         width: 100%;
     }
 
-    .sectionTitle {
+    /* Stats */
+    .stats {
+        padding: 40px 4%;
+    }
+
+    .statsContainer {
+        grid-template-columns: 1fr;
+        padding: 28px 20px;
+        gap: 20px;
+    }
+
+    .statItem h3 {
         font-size: 32px;
+    }
+
+    /* How It Works */
+    .howItWorks {
+        padding: 60px 4%;
+    }
+
+    .sectionTitle {
+        font-size: 28px;
+        margin-bottom: 36px;
+    }
+
+    .animMockup {
+        width: 220px;
+        height: 380px;
+        border-width: 10px;
+    }
+
+    .stepsGrid {
+        gap: 16px;
+    }
+
+    .stepCard {
+        gap: 16px;
+    }
+
+    .stepCard h3 {
+        font-size: 16px;
+    }
+
+    .stepCard p {
+        font-size: 13px;
+    }
+
+    .stepNum {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    /* Features */
+    .features {
+        padding: 60px 4%;
+    }
+
+    .featureItem {
+        padding: 24px;
+    }
+
+    .featureItem h4 {
+        font-size: 17px;
+    }
+
+    /* Testimonials Mobile */
+    .testimonials {
+        padding: 80px 0;
+    }
+    
+    .testiHeader {
+        padding: 0 5%;
         margin-bottom: 40px;
+    }
+    
+    .testiTitle {
+        font-size: 28px;
+    }
+    
+    .testiScrollWrap {
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        padding: 0 5% 40px 5%;
+        scrollbar-width: none;
+    }
+    
+    .testiScrollWrap::-webkit-scrollbar {
+        display: none;
+    }
+
+    .testiGrid {
+        width: max-content;
+        gap: 16px;
+    }
+    
+    .testiCard {
+        scroll-snap-align: center;
+        width: 85vw;
+        min-width: 280px;
+        max-width: 350px;
+        padding: 30px;
+    }
+
+    /* Pricing */
+    .pricing {
+        padding: 60px 4%;
+    }
+
+    .pricingCard {
+        padding: 32px 24px;
+    }
+
+    .price {
+        font-size: 40px;
+        margin-bottom: 24px;
+    }
+
+    /* CTA */
+    .cta {
+        padding: 40px 4%;
+    }
+
+    .ctaContent {
+        padding: 36px 20px;
+    }
+
+    .ctaContent h2 {
+        font-size: 26px;
+    }
+
+    .ctaContent p {
+        font-size: 15px;
+    }
+
+    .ctaActions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .whatsappBtn {
+        justify-content: center;
+        padding: 13px 20px;
+    }
+
+    /* Footer */
+    .footer {
+        padding: 50px 4% 30px;
+    }
+
+    .footerTop {
+        gap: 40px;
     }
 
     .footerBottom {
         flex-direction: column;
         gap: 20px;
         text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 10px 4%;
+    }
+
+    .hero {
+        padding: 32px 4% 24px;
+    }
+
+    .title {
+        font-size: 26px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    .mockup {
+        width: 200px;
+        height: 360px;
+        border-width: 8px;
+        border-radius: 28px;
+    }
+
+    .mockupHeader {
+        height: 130px;
+    }
+
+    .mockupTitleLarge {
+        font-size: 22px;
+    }
+
+    .mockupTitleSmall {
+        font-size: 13px;
+    }
+
+    .mockupCircle {
+        width: 44px;
+        height: 44px;
+        top: 110px;
+    }
+
+    .statsContainer {
+        padding: 20px 16px;
+        gap: 14px;
+    }
+
+    .statItem h3 {
+        font-size: 28px;
+    }
+
+    .animMockup {
+        width: 190px;
+        height: 340px;
+        border-width: 8px;
+        border-radius: 32px;
+    }
+
+    .mockupNotch {
+        width: 70px;
+        height: 18px;
+    }
+
+    .stepsGrid {
+        gap: 12px;
+    }
+
+    .featureItem {
+        padding: 20px;
+    }
+
+    .pricingCard {
+        padding: 24px 18px;
+    }
+
+    .price {
+        font-size: 34px;
+    }
+
+    .ctaContent h2 {
+        font-size: 22px;
+    }
+
+    .sectionTitle {
+        font-size: 24px;
+        margin-bottom: 28px;
     }
 }

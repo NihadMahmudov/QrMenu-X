@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../../context/LanguageContext';
+import LanguageSelector from '../shared/LanguageSelector';
+import SettingsSelector from '../shared/SettingsSelector';
 import styles from './LandingPage.module.css';
 
 export default function LandingPage() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [activeStep, setActiveStep] = useState(1);
+    const { t } = useLanguage();
 
     useEffect(() => {
         const getDelay = (step) => {
@@ -24,18 +28,16 @@ export default function LandingPage() {
             {/* Navbar */}
             <nav className={styles.navbar}>
                 <div className={styles.logo}>
-                    <img src="/logo.png" alt="QR Menyu Logo" className={styles.logoImg} />
-                    <span>QR Menyu</span>
+                    <img src="/logo.png" alt="Logo" className={styles.logoImg} />
+                    <span>{t('brand_name')}</span>
                 </div>
-                <button className={styles.menuToggle} onClick={() => setMenuOpen(!menuOpen)}>
-                    <i className={`fa-solid fa-${menuOpen ? 'xmark' : 'bars'}`} />
-                </button>
-                <div className={`${styles.navLinks} ${menuOpen ? styles.navActive : ''}`}>
-                    <a href="#features" onClick={() => setMenuOpen(false)}>Üstünlüklər</a>
-                    <a href="#how" onClick={() => setMenuOpen(false)}>Necə İşləyir?</a>
-                    <a href="#pricing" onClick={() => setMenuOpen(false)}>Tariflər</a>
-                    <Link to="/menu" className={styles.navDemo}>Nümunə Menyu</Link>
-                    <Link to="/admin" className={styles.navAdmin}>Daxil Ol</Link>
+                <div className={styles.navLinks}>
+                    <a href="#features">{t('features')}</a>
+                    <a href="#how">{t('how_it_works')}</a>
+                    <a href="#pricing">{t('pricing')}</a>
+                    <LanguageSelector />
+                    <SettingsSelector />
+                    <Link to="/admin" className={styles.navAdmin}>{t('nav_login')}</Link>
                 </div>
             </nav>
 
@@ -43,18 +45,17 @@ export default function LandingPage() {
             <section className={styles.hero}>
                 <div className={styles.heroGlow}></div>
                 <div className={styles.heroContent}>
-                    <div className={styles.badge}>🚀 Restoranınız üçün Rəqəmsal Gələcək</div>
-                    <h1 className={styles.title}>Rəqəmsal Menyu ilə<br />Müştəri Təcrübəsini <span className={styles.highlight}>Yeniləyin</span></h1>
+                    <div className={styles.badge}>{t('hero_badge')}</div>
+                    <h1 className={styles.title}>{t('hero_title_1')}<br />{t('hero_title_2')} <span className={styles.highlight}>{t('hero_title_highlight')}</span></h1>
                     <p className={styles.subtitle}>
-                        Müştəriləriniz mobil telefonlarından saniyələr içində menyunuza daxil olsun.
-                        Kağız menyu xərclərinə son qoyun və restoranınızı bir addım öndə aparın.
+                        {t('hero_subtitle')}
                     </p>
                     <div className={styles.heroActions}>
                         <Link to="/admin" className={styles.primaryBtn}>
-                            İndi Başlayın <i className="fa-solid fa-bolt" />
+                            {t('start_now')} <i className="fa-solid fa-bolt" />
                         </Link>
                         <Link to="/menu" className={styles.secondaryBtn}>
-                            <i className="fa-solid fa-mobile-screen" /> Demo Menyuya Bax
+                            <i className="fa-solid fa-mobile-screen" /> {t('view_demo')}
                         </Link>
                     </div>
                 </div>
@@ -64,8 +65,8 @@ export default function LandingPage() {
                     <div className={styles.mockup}>
                         <div className={styles.mockupHeader}>
                             <div className={styles.mockupTitleWrap}>
-                                <div className={styles.mockupTitleSmall}>QR Menyu'ya</div>
-                                <div className={styles.mockupTitleLarge}>Xoş Gəldiniz!</div>
+                                <div className={styles.mockupTitleSmall}>{t('mockup_qr')}</div>
+                                <div className={styles.mockupTitleLarge}>{t('welcome_tag')}</div>
                             </div>
                             <div className={styles.mockupCircle}>
                                 <img src="/logo.png" alt="Logo" />
@@ -80,11 +81,11 @@ export default function LandingPage() {
                     </div>
                     <div className={styles.floatingCard}>
                         <i className="fa-solid fa-check-circle" />
-                        <span>Sürətli Sifariş</span>
+                        <span>{t('fast_order')}</span>
                     </div>
                     <div className={`${styles.floatingCard} ${styles.cardLower}`}>
                         <i className="fa-solid fa-shield-halved" />
-                        <span>Təhlükəsiz Ödəniş</span>
+                        <span>{t('safe_payment')}</span>
                     </div>
                 </div>
             </section>
@@ -95,24 +96,24 @@ export default function LandingPage() {
                     <div className={styles.statItem}>
                         <div className={styles.statIcon}><i className="fa-solid fa-shop" /></div>
                         <h3>120+</h3>
-                        <p>Aktiv Restoran</p>
+                        <p>{t('stat_1_label')}</p>
                     </div>
                     <div className={styles.statItem}>
                         <div className={styles.statIcon}><i className="fa-solid fa-users" /></div>
                         <h3>50K+</h3>
-                        <p>Aylıq İstifadəçi</p>
+                        <p>{t('stat_2_label')}</p>
                     </div>
                     <div className={styles.statItem}>
                         <div className={styles.statIcon}><i className="fa-solid fa-star" /></div>
                         <h3>4.9/5</h3>
-                        <p>Müştəri Razılığı</p>
+                        <p>{t('stat_3_label')}</p>
                     </div>
                 </div>
             </section>
 
             {/* How It Works */}
             <section id="how" className={styles.howItWorks}>
-                <h2 className={styles.sectionTitle}>Necə İşləyir?</h2>
+                <h2 className={styles.sectionTitle}>{t('how_it_works')}</h2>
 
                 <div className={styles.howContent}>
                     <div className={styles.processVisual}>
@@ -134,10 +135,10 @@ export default function LandingPage() {
                                                 <span className={styles.typingText2}>info@bakusteak.az</span>
                                                 <div className={styles.cursor}></div>
                                             </div>
-                                            <div className={styles.mockBtn}>Hesab Yarat</div>
+                                            <div className={styles.mockBtn}>{t('create_account')}</div>
                                             <div className={styles.checkWrap}>
                                                 <i className={`fa-solid fa-circle-check ${styles.checkIcon}`} />
-                                                <span>Uğurlu!</span>
+                                                <span>{t('success')}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -150,7 +151,7 @@ export default function LandingPage() {
                                             <div className={styles.mockupAvatar}>🥩</div>
                                             <div className={styles.mockupProfileInfo}>
                                                 <b>Baku Steak House</b>
-                                                <span>İdarəetmə Paneli</span>
+                                                <span>{t('dashboard')}</span>
                                             </div>
                                         </div>
                                         <div className={styles.stageContent}>
@@ -169,14 +170,14 @@ export default function LandingPage() {
                                         </div>
                                     </div>
                                     {/* Scanning Stage */}
-                                    <div className={`${styles.stage} ${activeStep === 3 ? styles.stageActive : ''}`}>
+                                    <div className={`${styles.stage} ${styles.stageNoHeader} ${activeStep === 3 ? styles.stageActive : ''}`}>
                                         <div className={styles.stageContent}>
                                             <div className={styles.qrBox}>
                                                 <i className="fa-solid fa-qrcode" />
                                                 <div className={styles.scanLine}></div>
                                             </div>
                                             <div className={styles.scanSuccess}>
-                                                <div className={styles.successBadge}>Müştəri Baxışı</div>
+                                                <div className={styles.successBadge}>{t('customer_view')}</div>
                                                 <div className={styles.miniMenu}>
                                                     <div className={styles.miniScrollList}>
                                                         <div className={styles.miniItemCard}><div className={styles.miniImg}>🍔</div><div className={styles.miniInfo}><div className={styles.miniTitle}>Burger</div><div className={styles.miniPrice}>9.50 ₼</div></div></div>
@@ -212,14 +213,14 @@ export default function LandingPage() {
                             <div className={`${styles.stepCard} ${activeStep === 1 ? styles.stepActive : ''}`} onClick={() => setActiveStep(1)}>
                                 <div className={styles.stepNum}>1</div>
                                 <div className={styles.stepText}>
-                                    <h3>Qeydiyyatdan Keçin</h3>
-                                    <p>Saniyələr içində hesabınızı yaradın və restoran məlumatlarını daxil edin.</p>
+                                    <h3>{t('step_1_title')}</h3>
+                                    <p>{t('step_1_desc')}</p>
                                 </div>
                             </div>
                             <div className={styles.indicatorWrap}>
                                 <div className={`${styles.processStep} ${activeStep === 1 ? styles.stepIconActive : ''}`} onClick={() => setActiveStep(1)}>
                                     <div className={styles.stepIcon}><i className="fa-solid fa-user-plus" /></div>
-                                    <div className={styles.stepLabel}>Qeydiyyat</div>
+                                    <div className={styles.stepLabel}>{t('register')}</div>
                                 </div>
                                 <div className={styles.processLineVertical}></div>
                             </div>
@@ -230,14 +231,14 @@ export default function LandingPage() {
                             <div className={`${styles.stepCard} ${activeStep === 2 ? styles.stepActive : ''}`} onClick={() => setActiveStep(2)}>
                                 <div className={styles.stepNum}>2</div>
                                 <div className={styles.stepText}>
-                                    <h3>Menyunuzu Yaradın</h3>
-                                    <p>Yeməkləri, şəkilləri və qiymətləri asanlıqla panelimizdən əlavə edin.</p>
+                                    <h3>{t('step_2_title')}</h3>
+                                    <p>{t('step_2_desc')}</p>
                                 </div>
                             </div>
                             <div className={styles.indicatorWrap}>
                                 <div className={`${styles.processStep} ${activeStep === 2 ? styles.stepIconActive : ''}`} onClick={() => setActiveStep(2)}>
                                     <div className={styles.stepIcon}><i className="fa-solid fa-utensils" /></div>
-                                    <div className={styles.stepLabel}>Menyu</div>
+                                    <div className={styles.stepLabel}>{t('menu')}</div>
                                 </div>
                                 <div className={styles.processLineVertical}></div>
                             </div>
@@ -248,14 +249,14 @@ export default function LandingPage() {
                             <div className={`${styles.stepCard} ${activeStep === 3 ? styles.stepActive : ''}`} onClick={() => setActiveStep(3)}>
                                 <div className={styles.stepNum}>3</div>
                                 <div className={styles.stepText}>
-                                    <h3>QR Kodunuzu Paylaşın</h3>
-                                    <p>QR kodunuzu masalara yerləşdirin, müştərilər menyunu anında görsün.</p>
+                                    <h3>{t('step_3_title')}</h3>
+                                    <p>{t('step_3_desc')}</p>
                                 </div>
                             </div>
                             <div className={styles.indicatorWrap}>
                                 <div className={`${styles.processStep} ${activeStep === 3 ? styles.stepIconActive : ''}`} onClick={() => setActiveStep(3)}>
                                     <div className={styles.stepIcon}><i className="fa-solid fa-qrcode" /></div>
-                                    <div className={styles.stepLabel}>Skan</div>
+                                    <div className={styles.stepLabel}>{t('scan')}</div>
                                 </div>
                             </div>
                         </div>
@@ -266,63 +267,138 @@ export default function LandingPage() {
             {/* Features Grid */}
             <section id="features" className={styles.features}>
                 <div className={styles.featuresHeader}>
-                    <h2 className={styles.sectionTitle}>Niyə Bizim Platforma?</h2>
-                    <p>Ən müasir funksionallıqları bir yerdə topladıq</p>
+                    <h2 className={styles.sectionTitle}>{t('why_us')}</h2>
+                    <p>{t('why_us_desc')}</p>
                 </div>
                 <div className={styles.featuresGrid}>
                     <div className={styles.featureItem}>
                         <i className="fa-solid fa-wand-magic-sparkles" />
-                        <h4>Fərqli QR Dizaynları</h4>
-                        <p>8 fərqli dizayn və limitsiz rəng seçimləri ilə öz QR kodunuzu yaradın.</p>
+                        <h4>{t('feature_1_title')}</h4>
+                        <p>{t('feature_1_desc')}</p>
                     </div>
                     <div className={styles.featureItem}>
                         <i className="fa-solid fa-language" />
-                        <h4>Çoxdilli Dəstək</h4>
-                        <p>Müştəriləriniz üçün menyunu fərqli dillərdə təqdim etmək imkanı.</p>
+                        <h4>{t('feature_2_title')}</h4>
+                        <p>{t('feature_2_desc')}</p>
                     </div>
                     <div className={styles.featureItem}>
                         <i className="fa-solid fa-clock-rotate-left" />
-                        <h4>Real Vaxt Yenilənmə</h4>
-                        <p>Qiymət və ya məhsul dəyişikliyi saniyələr içində tətbiq olunur.</p>
+                        <h4>{t('feature_3_title')}</h4>
+                        <p>{t('feature_3_desc')}</p>
                     </div>
                     <div className={styles.featureItem}>
                         <i className="fa-solid fa-mobile-button" />
-                        <h4>Mobil Proqram Lazım Deyil</h4>
-                        <p>Müştərilər heç bir tətbiq yükləmədən birbaşa brauzerdən istifadə edir.</p>
+                        <h4>{t('feature_4_title')}</h4>
+                        <p>{t('feature_4_desc')}</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* Testimonials / What Owners Say */}
+            <section className={styles.testimonials}>
+                <div className={styles.testiHeader}>
+                    <h2 className={styles.testiTitle}>{t('testi_title')}</h2>
+                    <p>{t('testi_desc')}</p>
+                </div>
+                
+                <div className={styles.testiScrollWrap}>
+                    <div className={styles.testiGrid}>
+                        {/* Card 1 */}
+                        <div className={styles.testiCard}>
+                            <i className={`fa-solid fa-quote-right ${styles.quoteIcon}`}></i>
+                            <div className={styles.testiStars}>
+                                <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
+                            </div>
+                            <p className={styles.testiText}>{t('testi_1')}</p>
+                            <div className={styles.testiAuthor}>
+                                <div className={styles.testiAvatar} style={{backgroundColor: '#FF6B6B'}}>BC</div>
+                                <div className={styles.testiInfo}>
+                                    <h4>Baku Central</h4>
+                                    <span>{t('testi_type_1')}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Card 2 */}
+                        <div className={styles.testiCard}>
+                            <i className={`fa-solid fa-quote-right ${styles.quoteIcon}`}></i>
+                            <div className={styles.testiStars}>
+                                <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
+                            </div>
+                            <p className={styles.testiText}>{t('testi_2')}</p>
+                            <div className={styles.testiAuthor}>
+                                <div className={styles.testiAvatar} style={{backgroundColor: '#4ECDC4'}}>L9</div>
+                                <div className={styles.testiInfo}>
+                                    <h4>Lounge 99</h4>
+                                    <span>{t('testi_type_2')}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Card 3 */}
+                        <div className={styles.testiCard}>
+                            <i className={`fa-solid fa-quote-right ${styles.quoteIcon}`}></i>
+                            <div className={styles.testiStars}>
+                                <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
+                            </div>
+                            <p className={styles.testiText}>{t('testi_3')}</p>
+                            <div className={styles.testiAuthor}>
+                                <div className={styles.testiAvatar} style={{backgroundColor: '#FFD166', color: '#000'}}>KE</div>
+                                <div className={styles.testiInfo}>
+                                    <h4>Kabab Evi</h4>
+                                    <span>{t('testi_type_3')}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
             {/* Pricing Section */}
             <section id="pricing" className={styles.pricing}>
-                <h2 className={styles.sectionTitle}>Sadə və Şəffaf Qiymətlər</h2>
+                <h2 className={styles.sectionTitle}>{t('pricing_title')}</h2>
                 <div className={styles.pricingGrid}>
-                    <div className={styles.pricingCard}>
+                    <div className={`${styles.pricingCard} ${styles.pricingPro}`}>
+                        <div className={styles.proBadge}>{t('free')}</div>
                         <div className={styles.priceHeader}>
-                            <h3>Pulsuz</h3>
-                            <div className={styles.price}>0 ₼ <span>/ay</span></div>
+                            <h3>{t('free')}</h3>
+                            <div className={styles.price}>0 ₼ <span>{t('per_month')}</span></div>
                         </div>
                         <ul className={styles.priceList}>
-                            <li><i className="fa-solid fa-check" /> 50 məhsul limiti</li>
-                            <li><i className="fa-solid fa-check" /> Standart QR dizayn</li>
-                            <li><i className="fa-solid fa-check" /> Limitsiz baxış</li>
-                            <li className={styles.disabled}><i className="fa-solid fa-xmark" /> Prioritet dəstək</li>
+                            <li><i className="fa-solid fa-check" /> {t('pr_f_1')}</li>
+                            <li><i className="fa-solid fa-check" /> {t('pr_f_2')}</li>
+                            <li><i className="fa-solid fa-check" /> {t('pr_f_3')}</li>
+                            <li className={styles.disabled}><i className="fa-solid fa-xmark" /> {t('pr_f_4')}</li>
                         </ul>
-                        <Link to="/admin" className={styles.priceBtn}>İndi Başla</Link>
+                        <Link to="/admin" className={styles.priceBtnPro}>{t('start_free') || t('start_now')}</Link>
                     </div>
                     <div className={`${styles.pricingCard} ${styles.pricingPro}`}>
-                        <div className={styles.proBadge}>Ən Çox Seçilən</div>
+                        <div className={styles.proBadge}>{t('most_popular')}</div>
                         <div className={styles.priceHeader}>
-                            <h3>Aylıq Abunə</h3>
-                            <div className={styles.price}>29 ₼ <span>/ay</span></div>
+                            <h3>{t('monthly_sub')}</h3>
+                            <div className={styles.price}>29 ₼ <span>{t('per_month')}</span></div>
                         </div>
                         <ul className={styles.priceList}>
-                            <li><i className="fa-solid fa-check" /> Limitsiz məhsul</li>
-                            <li><i className="fa-solid fa-check" /> Premium QR dizaynları</li>
-                            <li><i className="fa-solid fa-check" /> Şəkil optimizasiyası</li>
-                            <li><i className="fa-solid fa-check" /> 24/7 Prioritet dəstək</li>
+                            <li><i className="fa-solid fa-check" /> {t('pr_f_5')}</li>
+                            <li><i className="fa-solid fa-check" /> {t('pr_f_6')}</li>
+                            <li><i className="fa-solid fa-check" /> {t('pr_f_7')}</li>
+                            <li><i className="fa-solid fa-check" /> {t('pr_f_8')}</li>
                         </ul>
-                        <Link to="/admin" className={styles.priceBtnPro}>Premium-a Keç</Link>
+                        <Link to="/admin" className={styles.priceBtnPro}>{t('go_premium')}</Link>
+                    </div>
+                    <div className={`${styles.pricingCard} ${styles.pricingPro}`}>
+                        <div className={styles.proBadge}>{t('best_value')}</div>
+                        <div className={styles.priceHeader}>
+                            <h3>{t('yearly_sub')}</h3>
+                            <div className={styles.price}>290 ₼ <span>{t('per_year')}</span></div>
+                        </div>
+                        <ul className={styles.priceList}>
+                            <li><i className="fa-solid fa-check" /> {t('pr_f_9')}</li>
+                            <li><i className="fa-solid fa-check" /> {t('pr_f_10')}</li>
+                            <li><i className="fa-solid fa-check" /> {t('pr_f_6')}</li>
+                            <li><i className="fa-solid fa-check" /> {t('pr_f_11')}</li>
+                        </ul>
+                        <Link to="/admin" className={styles.priceBtnPro}>{t('go_yearly')}</Link>
                     </div>
                 </div>
             </section>
@@ -330,12 +406,12 @@ export default function LandingPage() {
             {/* CTA Section */}
             <section className={styles.cta}>
                 <div className={styles.ctaContent}>
-                    <h2>Bizimlə Başlamağa Hazırsınız?</h2>
-                    <p>Bir neçə dəqiqə içində restoranınızı rəqəmsallaşdırın.</p>
+                    <h2>{t('cta_title')}</h2>
+                    <p>{t('cta_desc')}</p>
                     <div className={styles.ctaActions}>
-                        <Link to="/admin" className={styles.primaryBtn}>Qeydiyyatdan Keç</Link>
+                        <Link to="/admin" className={styles.primaryBtn}>{t('register')}</Link>
                         <a href="https://wa.me/994554772779" target="_blank" className={styles.whatsappBtn}>
-                            <i className="fa-brands fa-whatsapp" /> WhatsApp ilə əlaqə
+                            <i className="fa-brands fa-whatsapp" /> {t('contact_wa')}
                         </a>
                     </div>
                 </div>
@@ -347,27 +423,27 @@ export default function LandingPage() {
                     <div className={styles.footerBrand}>
                         <div className={styles.logo}>
                             <img src="/logo.png" alt="Logo" className={styles.logoImg} />
-                            <span>QR Menyu</span>
+                            <span>{t('brand_name')}</span>
                         </div>
-                        <p>Restoranlar üçün ən yaxşı rəqəmsal həll yolu.</p>
+                        <p>{t('footer_desc')}</p>
                     </div>
                     <div className={styles.footerLinks}>
                         <div className={styles.linkGroup}>
-                            <h5>Platforma</h5>
-                            <a href="#features">Üstünlüklər</a>
-                            <a href="#how">Necə işləyir?</a>
-                            <a href="#pricing">Tariflər</a>
+                            <h5>{t('platform')}</h5>
+                            <a href="#features">{t('features')}</a>
+                            <a href="#how">{t('how_it_works')}</a>
+                            <a href="#pricing">{t('pricing')}</a>
                         </div>
                         <div className={styles.linkGroup}>
-                            <h5>Dəstək</h5>
-                            <a href="#">Məxfilik siyasəti</a>
-                            <a href="#">İstifadə şərtləri</a>
-                            <a href="#">Bizimlə əlaqə</a>
+                            <h5>{t('support')}</h5>
+                            <a href="#">{t('privacy')}</a>
+                            <a href="#">{t('terms')}</a>
+                            <a href="#">{t('contact_us')}</a>
                         </div>
                     </div>
                 </div>
                 <div className={styles.footerBottom}>
-                    <p>© 2026 QR Menyu AZ. Bütün hüquqlar qorunur.</p>
+                    <p>{t('copyright')}</p>
                     <div className={styles.socials}>
                         <a href="#"><i className="fa-brands fa-instagram" /></a>
                         <a href="#"><i className="fa-brands fa-facebook" /></a>

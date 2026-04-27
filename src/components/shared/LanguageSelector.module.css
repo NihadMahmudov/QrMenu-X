@@ -1,0 +1,124 @@
+.container {
+    position: relative;
+    display: inline-block;
+}
+
+.toggle {
+    background: transparent;
+    border: none;
+    color: var(--muted, #64748B);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.toggle:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text, #0F172A);
+}
+
+.toggleText {
+    letter-spacing: 0.5px;
+}
+
+.icon {
+    font-size: 10px;
+    opacity: 0.5;
+    transition: transform 0.2s ease;
+}
+
+.iconOpen {
+    transform: rotate(180deg);
+}
+
+.dropdown {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 8px;
+    min-width: 180px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 14px;
+    border: none;
+    background: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4B5563;
+    /* neutral-600 */
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.optionLeft {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.optionFlag {
+    font-size: 18px;
+    width: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.optionLabel {
+    color: inherit;
+}
+
+.option:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #111827;
+    /* neutral-900 */
+}
+
+.optionActive {
+    background: rgba(0, 0, 0, 0.03);
+    color: #111827;
+}
+
+.optionActive i {
+    color: var(--accent, #f15a24);
+    font-size: 12px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        /* Ensure it fits in row */
+    }
+}

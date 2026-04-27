@@ -25,6 +25,12 @@ export default function AuthModal({ onClose, onLogin }) {
         onClose();
     };
 
+    const handleForgot = () => {
+        if (!form.email) { setError('E-mail ünvanınızı daxil edin'); return; }
+        setTab('forgot_sent');
+    };
+
+
     return (
         <div className={styles.overlay} onClick={e => e.target === e.currentTarget && onClose()}>
             <div className={styles.box}>
@@ -43,6 +49,7 @@ export default function AuthModal({ onClose, onLogin }) {
                         <div className={styles.field}>
                             <label>Şifrə</label>
                             <div className={styles.inputWrap}><i className="fa-solid fa-lock" /><input type="password" placeholder="••••••••" onChange={e => set('password', e.target.value)} /></div>
+                            <div className={styles.forgotLink} onClick={() => { setTab('forgot'); setError(''); }}>Şifrəmi unutdum?</div>
                         </div>
                         <button className={styles.btn} onClick={handleLogin}>Daxil Ol</button>
                         <p className={styles.switch}>Hesabınız yoxdur? <span onClick={() => { setTab('register'); setError(''); }}>Qeydiyyat</span></p>
@@ -66,6 +73,29 @@ export default function AuthModal({ onClose, onLogin }) {
                         </div>
                         <button className={styles.btn} onClick={handleRegister}>Qeydiyyatdan Keç</button>
                         <p className={styles.switch}>Hesabınız var? <span onClick={() => { setTab('login'); setError(''); }}>Daxil Ol</span></p>
+                    </>
+                ) : tab === 'forgot' ? (
+                    <>
+                        <h2 className={styles.title}>Şifrəni Yenilə</h2>
+                        <p className={styles.sub}>E-mail ünvanınızı daxil edin</p>
+                        {error && <p className={styles.error}>{error}</p>}
+                        <div className={styles.field}>
+                            <label>E-mail</label>
+                            <div className={styles.inputWrap}><i className="fa-solid fa-envelope" /><input type="email" placeholder="ad@email.com" onChange={e => set('email', e.target.value)} /></div>
+                        </div>
+                        <button className={styles.btn} onClick={handleForgot}>Göndər</button>
+                        <p className={styles.switch}><span onClick={() => { setTab('login'); setError(''); }}>Geri Qayıt</span></p>
+                    </>
+                ) : (
+                    <>
+                        <div className={styles.logo} style={{ background: '#10b981', margin: '0 auto 20px' }}>
+                            <i className="fa-solid fa-check" />
+                        </div>
+                        <h2 className={styles.title}>Göndərildi!</h2>
+                        <p className={styles.sub} style={{ marginBottom: '24px' }}>
+                            Şifrə sıfırlama linki <b>{form.email}</b> ünvanına göndərildi.
+                        </p>
+                        <button className={styles.btn} onClick={() => { setTab('login'); setError(''); }}>Daxil Ol</button>
                     </>
                 )}
             </div>

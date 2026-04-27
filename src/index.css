@@ -13,10 +13,10 @@ html {
 }
 
 :root {
-    --primary: #059669;
-    --primary-glow: rgba(5, 150, 105, 0.15);
-    --secondary: #D97706;
-    --secondary-glow: rgba(217, 119, 6, 0.1);
+    --primary: #f15a24;
+    --primary-glow: rgba(241, 90, 36, 0.15);
+    --secondary: #ff8c42;
+    --secondary-glow: rgba(255, 140, 66, 0.1);
     --bg: #F8FAFC;
     --card: #FFFFFF;
     --card-hover: #F1F5F9;
