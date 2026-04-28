@@ -14,20 +14,32 @@ import styles from './MenuPage.module.css';
 const FALLBACK_COVER = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=85';
 const FALLBACK_LOGO = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=300&q=80';
 
-export default function MenuPage() {
+export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb }) {
     const navigate = useNavigate();
     const { db: contextDb, ownerEmail: contextEmail } = useData();
     const { addToCart, setTableNumber, tableNumber } = useCart();
     const { t, lang, setLang } = useLanguage();
     const { message, visible, showToast } = useToast();
     const [searchParams] = useSearchParams();
-    const isPreviewMode = searchParams.get('preview') === 'true';
-    const previewTab = searchParams.get('tab');
-    const ownerParam = searchParams.get('owner'); // from QR code
+    const isPreviewMode = overrideIsPreview ?? (searchParams.get('preview') === 'true');
+    const previewTab = overrideTab ?? searchParams.get('tab');
+    const ownerParam = overrideIsPreview ? null : searchParams.get('owner'); // from QR code
 
     // Load from Supabase if owner param is in URL
     const [remoteDb, setRemoteDb] = useState(null);
     const [loadingRemote, setLoadingRemote] = useState(false);
+
+    const [showTable, setShowTable] = useState(false);
+    const [tableInput, setTableInput] = useState('');
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [searchOpen, setSearchOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [activeCategory, setActiveCategory] = useState('');
+    const searchRef = useRef(null);
+
+    useEffect(() => {
+        if (!activeCategory) setActiveCategory('all');
+    }, [activeCategory]);
 
     useEffect(() => {
         if (!ownerParam) return;
@@ -36,7 +48,7 @@ export default function MenuPage() {
         supabase
             .from('menu_data')
             .select('data')
-            .eq('owner_email', ownerParam)
+            .ilike('owner_email', ownerParam)
             .single()
             .then(({ data: menuRow, error: menuErr }) => {
                 if (menuErr) console.error('Menu fetch error:', menuErr);
@@ -46,7 +58,7 @@ export default function MenuPage() {
     }, [ownerParam]);
 
     // Use remote data if owner param exists, else use logged-in user's data
-    const db = ownerParam ? remoteDb : contextDb;
+    const db = overrideDb || (ownerParam ? remoteDb : contextDb);
 
     // Loading state UI
     if (loadingRemote) {
@@ -157,22 +169,9 @@ export default function MenuPage() {
     const ITEMS = finalDb?.items || [];
 
 
-    const [showTable, setShowTable] = useState(false);
-    const [tableInput, setTableInput] = useState('');
-    const [selectedItem, setSelectedItem] = useState(null);
-    const [searchOpen, setSearchOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [activeCategory, setActiveCategory] = useState('');
-    const searchRef = useRef(null);
-
     // Categories with "All" added at the start
     const allCategory = { id: 'all', name: t('all'), emoji: '🏠' };
     const activeCats = [allCategory, ...(CATS || []).filter(cat => (ITEMS || []).some(i => i.catId === cat.id))];
-
-    // Initial category
-    useEffect(() => {
-        if (!activeCategory) setActiveCategory('all');
-    }, [activeCategory]);
 
     // Search
     const searchResults = searchQuery
@@ -235,7 +234,7 @@ export default function MenuPage() {
                         <img src={R.coverUrl || FALLBACK_COVER} alt="Cover" className={styles.heroImg} onError={e => e.target.src = FALLBACK_COVER} />
                         <div className={styles.heroOverlay} />
                     </div>
-                            <div className={styles.heroContent}>
+                    <div className={styles.heroContent}>
                             <div className={styles.logoWrap}>
                                 {R.logoUrl ? (
                                     <img src={R.logoUrl} alt="Logo" onError={e => { e.target.style.display = 'none'; e.target.parentElement.classList.add(styles.logoWithIcon); }} />

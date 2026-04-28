@@ -7,7 +7,7 @@ export function defaultDB(ownerName, ownerEmail) {
     return {
         owner: { name: ownerName, email: ownerEmail },
         restaurant: {
-            name: ownerName, tagline: '', coverUrl: '', logoUrl: '',
+            name: '', tagline: '', coverUrl: '', logoUrl: '',
             phone: '', whatsapp: '', address: '', hours: '', wifi: '', rating: ''
         },
         categories: [

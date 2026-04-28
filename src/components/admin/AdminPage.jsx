@@ -12,6 +12,7 @@ import ItemsTab from './ItemsTab';
 import SettingsTab from './SettingsTab';
 import QRTab from './QRTab';
 import SuperAdminPanel from './SuperAdminPanel';
+import MenuPage from '../menu/MenuPage';
 import styles from './AdminPage.module.css';
 
 export default function AdminPage() {
@@ -31,14 +32,19 @@ export default function AdminPage() {
     const searchInputRef = useRef(null);
     const pendingRestaurantRef = useRef(null);
 
+    const [pendingRest, setPendingRest] = useState(null);
+
     const registerPendingRestaurant = useCallback((data) => {
+        setPendingRest(data);
         pendingRestaurantRef.current = data;
     }, []);
 
     const flushPendingRestaurant = useCallback(() => {
-        if (pendingRestaurantRef.current) {
-            update(db => { db.restaurant = pendingRestaurantRef.current; return db; });
+        const currentData = pendingRestaurantRef.current;
+        if (currentData) {
+            update(db => { db.restaurant = currentData; return db; });
             pendingRestaurantRef.current = null;
+            setPendingRest(null);
         }
     }, [update]);
 
@@ -320,7 +326,13 @@ export default function AdminPage() {
                     {showLivePreview && (
                         <div className={styles.livePreview}>
                             <div className={styles.previewPhone}>
-                                <iframe src={`/menu?preview=true&tab=${tab}`} className={styles.previewFrame} />
+                                <div className={styles.previewFrameWrapper}>
+                                    <MenuPage 
+                                        overrideIsPreview={true} 
+                                        overrideTab={tab} 
+                                        overrideDb={pendingRest ? { ...db, restaurant: pendingRest } : db} 
+                                    />
+                                </div>
                             </div>
                         </div>
                     )}
