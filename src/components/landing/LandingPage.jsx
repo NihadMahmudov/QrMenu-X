@@ -30,29 +30,20 @@ export default function LandingPage() {
                     <img src="/logo.png" alt="Logo" className={styles.logoImg} />
                     <span>{t('brand_name')}</span>
                 </Link>
-                <div className={styles.navLinks}>
-                    <a href="#features">{t('features')}</a>
-                    <a href="#how">{t('how_it_works')}</a>
-                    <a href="#pricing">{t('pricing')}</a>
-                    <LanguageSelector />
-                    <Link to="/admin" className={styles.navAdmin}>{t('nav_login')}</Link>
+                
+                {/* Desktop and Mobile Shared Right Side */}
+                <div className={styles.navRight}>
+                    <div className={styles.navLinksText}>
+                        <a href="#features">{t('features')}</a>
+                        <a href="#how">{t('how_it_works')}</a>
+                        <a href="#pricing">{t('pricing')}</a>
+                    </div>
+                    <div className={styles.navActions}>
+                        <LanguageSelector />
+                        <Link to="/admin" className={styles.navAdmin}>{t('nav_login')}</Link>
+                    </div>
                 </div>
-                <button className={styles.menuToggle} onClick={() => setMenuOpen(!menuOpen)}>
-                    <i className={`fa-solid fa-${menuOpen ? 'xmark' : 'bars-staggered'}`} />
-                </button>
             </nav>
-
-            {/* Mobile Menu Overlay */}
-            <div className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ''}`}>
-                <div className={styles.mobileMenuContent}>
-                    <a href="#features" onClick={() => setMenuOpen(false)}>{t('features')}</a>
-                    <a href="#how" onClick={() => setMenuOpen(false)}>{t('how_it_works')}</a>
-                    <a href="#pricing" onClick={() => setMenuOpen(false)}>{t('pricing')}</a>
-                    <div className={styles.mobileMenuDivider}></div>
-                    <LanguageSelector />
-                    <Link to="/admin" className={styles.navAdminMobile} onClick={() => setMenuOpen(false)}>{t('nav_login')}</Link>
-                </div>
-            </div>
 
             {/* Hero Section */}
             <section className={styles.hero}>

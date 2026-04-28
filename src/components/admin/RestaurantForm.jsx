@@ -101,12 +101,11 @@ export default function RestaurantForm({ showToast, onFormChange }) {
                     <div className={s.field}><label>{t('address')}</label><div className={s.inp}><input placeholder="Küçə, Şəhər" value={form.address || ''} onChange={e => set('address', e.target.value)} /></div></div>
                 </div>
 
-                {/* Other */}
+                {/* Social Media */}
                 <div className={s.card}>
-                    <h3 className={s.cardTitle}><i className="fa-solid fa-circle-info" /> {t('other')}</h3>
-                    <div className={s.field}><label>{t('work_hours')}</label><div className={s.inp}><input placeholder="10:00 – 23:00" value={form.hours || ''} onChange={e => set('hours', e.target.value)} /></div></div>
-                    <div className={s.field}><label>{t('wifi_password')}</label><div className={s.inp}><input placeholder="guest_wifi" value={form.wifi || ''} onChange={e => set('wifi', e.target.value)} /></div></div>
-                    <div className={s.field}><label>{t('rating')}</label><div className={s.inp}><input type="number" min="1" max="5" step="0.1" placeholder="4.8" value={form.rating || ''} onChange={e => set('rating', e.target.value)} /></div></div>
+                    <h3 className={s.cardTitle}><i className="fa-solid fa-share-nodes" /> Sosial Şəbəkələr</h3>
+                    <div className={s.field}><label>Instagram Linki</label><div className={s.inp}><input placeholder="https://instagram.com/sizin_hesab" value={form.instagram || ''} onChange={e => set('instagram', e.target.value)} /></div></div>
+                    <div className={s.field}><label>TikTok Linki</label><div className={s.inp}><input placeholder="https://tiktok.com/@sizin_hesab" value={form.tiktok || ''} onChange={e => set('tiktok', e.target.value)} /></div></div>
                 </div>
             </div>
             <div className={s.saveBar}>

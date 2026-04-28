@@ -57,13 +57,19 @@
     color: var(--accent);
 }
 
-.navLinks {
+.navRight {
     display: flex;
     align-items: center;
     gap: 32px;
 }
 
-.navLinks a {
+.navLinksText {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.navLinksText a {
     color: var(--text);
     text-decoration: none;
     font-size: 15px;
@@ -71,8 +77,14 @@
     transition: all 0.3s;
 }
 
-.navLinks a:hover {
+.navLinksText a:hover {
     color: var(--accent);
+}
+
+.navActions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .navDemo {
@@ -117,6 +129,7 @@
     gap: 60px;
     position: relative;
     min-height: 90vh;
+    overflow: hidden;
 }
 
 .heroGlow {
@@ -247,34 +260,47 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: 90%;
     gap: 4px;
 }
 
 .mockupTitleSmall {
-    width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    color: rgba(255, 255, 255, 0.9);
-    font-family: 'Dancing Script', cursive;
-    font-size: 18px;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    animation: typingSmall 1.2s steps(8, end) forwards;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 800;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     text-align: center;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.2;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUpMockup 1s ease forwards;
 }
 
 .mockupTitleLarge {
-    width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    color: #fff;
-    font-family: 'Dancing Script', cursive;
-    font-size: 34px;
-    font-weight: 800;
-    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    animation: typingLarge 1.5s steps(13, end) 1.2s forwards;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUpMockup 1s ease 0.3s forwards;
+}
+
+@keyframes fadeUpMockup {
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes typingSmall {
@@ -357,6 +383,8 @@
     gap: 12px;
     animation: float 6s ease-in-out infinite;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    white-space: nowrap;
+    z-index: 5;
 }
 
 .floatingCard i {
@@ -1737,19 +1765,19 @@
 
     .floatingCard {
         padding: 12px 18px;
-        font-size: 14px;
+        font-size: 13px;
         border-width: 3px;
-        right: 5%;
-        top: 20%;
+        right: 2%;
+        top: 18%;
         width: max-content;
         z-index: 5;
     }
 
     .cardLower {
-        left: 5%;
+        left: 2%;
         right: auto;
         top: auto;
-        bottom: 20%;
+        bottom: 18%;
     }
 
     .floatingCard i {
@@ -1922,21 +1950,11 @@
     }
 
     .floatingCard {
-        padding: 8px 12px;
-        font-size: 11px;
-        border-width: 2px;
-        right: -10px;
-        top: 10%;
-        border-radius: 12px;
-        z-index: 5;
-        width: max-content;
+        display: none;
     }
 
     .cardLower {
-        left: -10px;
-        right: auto;
-        top: auto;
-        bottom: 15%;
+        display: none;
     }
 
     .navLinks {
@@ -2191,5 +2209,9 @@
     .sectionTitle {
         font-size: 24px;
         margin-bottom: 28px;
+    }
+
+    .navLinksText {
+        display: none !important;
     }
 }

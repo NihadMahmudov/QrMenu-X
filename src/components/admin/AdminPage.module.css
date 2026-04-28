@@ -196,6 +196,7 @@
     position: sticky;
     top: 0;
     height: 100vh;
+    height: 100dvh; /* Dynamic height for mobile browsers */
     transition: var(--tr);
     z-index: 1000
 }
@@ -531,13 +532,38 @@
 @media (max-width: 1024px) {
     .sidebar {
         position: fixed;
-        left: -240px;
+        left: -280px;
         top: 0;
-        bottom: 0
+        bottom: 0;
+        width: 280px;
     }
 
     .sidebarOpen .sidebar {
         left: 0
+    }
+
+    .sidebarBrand {
+        padding: 20px;
+    }
+
+    .sidebarNav {
+        padding: 0 12px;
+        gap: 4px;
+    }
+
+    .navBtn {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+
+    .sidebarFooter {
+        padding: 12px;
+        gap: 8px;
+    }
+
+    .previewBtn, .logoutBtn {
+        padding: 10px 14px;
+        font-size: 13px;
     }
 
     .sidebarOpen .sidebarOverlay {
@@ -568,14 +594,38 @@
     .livePreview {
         display: none
     }
+
+    /* Hide live preview toggle button on mobile since pane is hidden */
+    .headerIconBtn:last-child {
+        display: none;
+    }
 }
 
 @media (max-width: 640px) {
     .tabContent {
-        padding: 20px 16px
+        padding: 20px 16px;
+        overflow-x: hidden;
+    }
+
+    .mainHeader {
+        padding: 0 12px;
+        gap: 8px;
     }
 
     .mainHeader h2 {
-        font-size: 18px
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .headerActions {
+        gap: 6px;
+    }
+    
+    .headerIconBtn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
     }
 }

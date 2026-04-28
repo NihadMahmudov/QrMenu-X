@@ -44,7 +44,7 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
     useEffect(() => {
         if (!ownerParam) return;
         setLoadingRemote(true);
-        
+
         supabase
             .from('menu_data')
             .select('data')
@@ -173,6 +173,16 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
     const allCategory = { id: 'all', name: t('all'), emoji: '🏠' };
     const activeCats = [allCategory, ...(CATS || []).filter(cat => (ITEMS || []).some(i => i.catId === cat.id))];
 
+    // Helper: Format WhatsApp number correctly for the wa.me API
+    const getWaLink = (num) => {
+        if (!num) return "https://wa.me/";
+        let clean = num.replace(/\D/g, ''); // Remove all non-numeric characters
+        if (clean.length === 10 && clean.startsWith('0')) {
+            clean = '994' + clean.substring(1); // Convert 050... to 99450...
+        }
+        return `https://wa.me/${clean}`;
+    };
+
     // Search
     const searchResults = searchQuery
         ? ITEMS.filter(i => i.name.toLowerCase().includes(searchQuery.toLowerCase()) || (i.desc || '').toLowerCase().includes(searchQuery.toLowerCase()))
@@ -190,8 +200,8 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
         showToast(`✅ ${t('table')} #${tableInput} ${t('table_selected')}`);
     };
 
-    const filteredItems = (activeCategory === 'all' 
-        ? ITEMS 
+    const filteredItems = (activeCategory === 'all'
+        ? ITEMS
         : ITEMS.filter(item => item.catId === activeCategory)) || [];
 
     return (
@@ -235,27 +245,24 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
                         <div className={styles.heroOverlay} />
                     </div>
                     <div className={styles.heroContent}>
-                            <div className={styles.logoWrap}>
-                                {R.logoUrl ? (
-                                    <img src={R.logoUrl} alt="Logo" onError={e => { e.target.style.display = 'none'; e.target.parentElement.classList.add(styles.logoWithIcon); }} />
-                                ) : (
-                                    <div className={styles.logoIconFallback}>
-                                        <i className="fa-solid fa-utensils" />
-                                    </div>
-                                )}
-                            </div>
-                            <div className={styles.heroWelcome}>
-                                <div className={styles.welcomeSmall}>{R.name || 'QR Menyu'}</div>
-                                <div className={styles.welcomeLarge}>{R.tagline || t('welcome_tag')}</div>
-                            </div>
-                        <div className={styles.badges}>
-                            {R.rating && <div className={styles.badge}><i className="fa-solid fa-star" /><span>{R.rating}</span></div>}
-                            {R.hours && <div className={styles.badge}><i className="fa-solid fa-clock" /><span>{R.hours}</span></div>}
-                            {R.wifi && <div className={styles.badge}><i className="fa-solid fa-wifi" /><span>{R.wifi}</span></div>}
-                            <div className={`${styles.badge} ${styles.tableBadge}`} onClick={() => setShowTable(true)}>
-                                <i className="fa-solid fa-chair" />
-                                <span>{tableNumber ? `${t('table')} #${tableNumber}` : t('select_table')}</span>
-                            </div>
+                        <div className={styles.logoWrap}>
+                            {R.logoUrl ? (
+                                <img src={R.logoUrl} alt="Logo" onError={e => { e.target.style.display = 'none'; e.target.parentElement.classList.add(styles.logoWithIcon); }} />
+                            ) : (
+                                <div className={styles.logoIconFallback}>
+                                    <i className="fa-solid fa-utensils" />
+                                </div>
+                            )}
+                        </div>
+                        <div className={styles.heroWelcome}>
+                            <div className={styles.welcomeSmall}>{R.name || 'QR Menyu'}</div>
+                            <div className={styles.welcomeLarge}>{R.tagline || t('welcome_tag')}</div>
+                        </div>
+                        {/* Show socials with fallbacks if empty so they remain visible for demo/preview */}
+                        <div className={styles.heroSocials}>
+                            <a href={R.instagram || "https://instagram.com"} target="_blank" rel="noreferrer" className={styles.socialIcon}><i className="fa-brands fa-instagram" /></a>
+                            <a href={R.tiktok || "https://tiktok.com"} target="_blank" rel="noreferrer" className={styles.socialIcon}><i className="fa-brands fa-tiktok" /></a>
+                            <a href={getWaLink(R.whatsapp)} target="_blank" rel="noreferrer" className={styles.socialIcon}><i className="fa-brands fa-whatsapp" /></a>
                         </div>
                         <div className={styles.heroActions}>
                             {R.phone && <a href={`tel:${R.phone}`} className={styles.actionBtn}><i className="fa-solid fa-phone" /> {t('call')}</a>}
@@ -319,11 +326,11 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
                     <section className={styles.section}>
                         <div className={styles.sectionHeader}>
                             <span className={styles.sectionTitle}>
-                                {activeCategory === 'all' 
-                                    ? `🏠 ${t('all_foods')}` 
+                                {activeCategory === 'all'
+                                    ? `🏠 ${t('all_foods')}`
                                     : `${activeCats.find(c => c.id === activeCategory)?.emoji || '🍴'} ${activeCats.find(c => c.id === activeCategory)?.name || t('foods')}`
-                                } 
-                                <span style={{fontSize: '14px', opacity: 0.5, marginLeft: '8px'}}>({filteredItems?.length || 0})</span>
+                                }
+                                <span style={{ fontSize: '14px', opacity: 0.5, marginLeft: '8px' }}>({filteredItems?.length || 0})</span>
                             </span>
                             <div className={styles.sectionLine} />
                         </div>
@@ -334,6 +341,24 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
                         </div>
                     </section>
                 )}
+
+                {/* FOOTER */}
+                <footer className={styles.footer}>
+                    <div className={styles.footerContent}>
+                        <div className={styles.footerLogo}>
+                            {R.logoUrl ? <img src={R.logoUrl} alt="Logo" /> : <i className="fa-solid fa-utensils" />}
+                        </div>
+                        <h3>{R.name || 'QR Menyu'}</h3>
+                        <p>Bizi sosial şəbəkələrdə izləyin</p>
+                        
+                        <div className={styles.footerSocials}>
+                            <a href={R.instagram || "https://instagram.com"} target="_blank" rel="noreferrer"><i className="fa-brands fa-instagram" /></a>
+                            <a href={R.tiktok || "https://tiktok.com"} target="_blank" rel="noreferrer"><i className="fa-brands fa-tiktok" /></a>
+                            <a href={getWaLink(R.whatsapp)} target="_blank" rel="noreferrer"><i className="fa-brands fa-whatsapp" /></a>
+                        </div>
+                        <div className={styles.footerCopy}>© {new Date().getFullYear()} Bütün hüquqlar qorunur.</div>
+                    </div>
+                </footer>
             </main>
 
             {/* CART */}
@@ -377,7 +402,7 @@ function ItemCard({ item, onAdd, onClick }) {
             <div className={styles.cardBody}>
                 <div className={styles.cardName}>{item.name}</div>
                 <div className={styles.cardDesc}>{item.desc}</div>
-                
+
                 <div className={styles.itemStats}>
                     <div className={styles.statItem}>
                         <i className="fa-regular fa-clock" />

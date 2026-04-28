@@ -8,10 +8,18 @@ export default function QRTab({ showToast }) {
     const [copied, setCopied] = useState(false);
 
     const restaurantName = db?.restaurant?.name || 'Restoranım';
-    const base = window.location.origin;
+    
+    // Always force the live Vercel URL if accessed locally, otherwise use the live origin
+    const base = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'https://qr-menu-wine-iota.vercel.app'
+        : window.location.origin;
+        
+    // Do not encode the @ symbol to prevent mobile QR scanners from misinterpreting %40.
+    // Also, add a cache-busting timestamp (&t=...) so mobile browsers NEVER load a cached 404 page!
+    const cacheBuster = Date.now();
     const menuUrl = ownerEmail
-        ? `${base}/menu?owner=${encodeURIComponent(ownerEmail)}`
-        : `${base}/menu`;
+        ? `${base}/menu?owner=${ownerEmail}&t=${cacheBuster}`
+        : `${base}/menu?t=${cacheBuster}`;
 
     const copyLink = async () => {
         try {
