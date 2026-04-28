@@ -33,6 +33,7 @@
     border-bottom: 4px solid var(--border);
 }
 
+
 .logo {
     font-size: 24px;
     font-weight: 800;
@@ -41,6 +42,7 @@
     gap: 12px;
     letter-spacing: -0.5px;
     color: var(--text);
+    text-decoration: none;
 }
 
 .logoImg {
@@ -86,7 +88,12 @@
     background: var(--accent);
     color: #fff !important;
     font-weight: 600 !important;
-    box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.navAdmin:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--accent-glow);
+    background: var(--accent-light);
 }
 
 .menuToggle {
@@ -94,8 +101,11 @@
     background: none;
     border: none;
     color: var(--text);
-    font-size: 24px;
+    font-size: 28px;
     cursor: pointer;
+    z-index: 1001;
+    transition: var(--tr);
+    padding: 8px;
 }
 
 /* HERO */
@@ -197,7 +207,9 @@
 }
 
 .secondaryBtn:hover {
-    background: var(--border);
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
 }
 
 /* MOCKUP */
@@ -247,7 +259,7 @@
     font-family: 'Dancing Script', cursive;
     font-size: 18px;
     font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     animation: typingSmall 1.2s steps(8, end) forwards;
     text-align: center;
 }
@@ -260,19 +272,29 @@
     font-family: 'Dancing Script', cursive;
     font-size: 34px;
     font-weight: 800;
-    text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     animation: typingLarge 1.5s steps(13, end) 1.2s forwards;
     text-align: center;
 }
 
 @keyframes typingSmall {
-    from { width: 0 }
-    to { width: 140px }
+    from {
+        width: 0
+    }
+
+    to {
+        width: 140px
+    }
 }
 
 @keyframes typingLarge {
-    from { width: 0 }
-    to { width: 280px }
+    from {
+        width: 0
+    }
+
+    to {
+        width: 280px
+    }
 }
 
 .mockupCircle {
@@ -283,7 +305,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     border: 3px solid var(--accent);
     overflow: hidden;
     position: absolute;
@@ -595,7 +617,8 @@
     height: 60px;
     background: var(--border);
     opacity: 0.2;
-    margin-bottom: -40px; /* Offset to connect with next icon */
+    margin-bottom: -40px;
+    /* Offset to connect with next icon */
 }
 
 /* Animation Loop */
@@ -613,7 +636,7 @@
     background: #fff;
     padding: 10px;
     position: relative;
-    box-shadow: 0 40px 100px rgba(0,0,0,0.15);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
 }
 
 .mockupNotch {
@@ -653,11 +676,13 @@
     justify-content: center;
     gap: 5px;
     z-index: 10;
-    background: rgba(255,255,255,0.9);
+    background: rgba(255, 255, 255, 0.9);
     padding: 4px 0;
 }
 
-.mockupHeaderLogo i { color: var(--accent); }
+.mockupHeaderLogo i {
+    color: var(--accent);
+}
 
 /* Stages */
 .stage {
@@ -735,11 +760,11 @@
 }
 
 /* Stage Elements */
-.mockInp { 
-    height: 38px; 
-    background: #f8fafc; 
-    border-radius: 10px; 
-    border: 3px solid var(--border); 
+.mockInp {
+    height: 38px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 3px solid var(--border);
     padding: 0 12px;
     display: flex;
     align-items: center;
@@ -751,7 +776,8 @@
     overflow: hidden;
 }
 
-.typingText1, .typingText2 {
+.typingText1,
+.typingText2 {
     white-space: nowrap;
     overflow: hidden;
     width: 0;
@@ -767,8 +793,13 @@
 }
 
 @keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
 }
 
 .cursor {
@@ -788,15 +819,23 @@
 }
 
 @keyframes cursorAnim {
-    0%, 100% { opacity: 0; }
-    5%, 95% { opacity: 1; }
+
+    0%,
+    100% {
+        opacity: 0;
+    }
+
+    5%,
+    95% {
+        opacity: 1;
+    }
 }
 
-.mockBtn { 
-    height: 42px; 
-    background: var(--accent); 
-    border-radius: 10px; 
-    margin-top: 5px; 
+.mockBtn {
+    height: 42px;
+    background: var(--accent);
+    border-radius: 10px;
+    margin-top: 5px;
     color: #fff;
     display: flex;
     align-items: center;
@@ -821,18 +860,28 @@
     color: var(--accent);
 }
 
-.checkIcon { font-size: 44px; color: var(--accent); }
-
-@keyframes popCheck {
-    0% { transform: scale(0); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+.checkIcon {
+    font-size: 44px;
+    color: var(--accent);
 }
 
-.mockItemCard { 
-    height: 65px; 
-    background: #fff; 
-    border: 3px solid var(--border); 
-    border-radius: 14px; 
+@keyframes popCheck {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.mockItemCard {
+    height: 65px;
+    background: #fff;
+    border: 3px solid var(--border);
+    border-radius: 14px;
     display: flex;
     align-items: center;
     padding: 10px;
@@ -840,9 +889,17 @@
     transition: transform 0.3s;
 }
 
-.stageActive .mockItemCard:nth-child(1) { transition-delay: 0.1s; }
-.stageActive .mockItemCard:nth-child(2) { transition-delay: 0.2s; }
-.stageActive .mockItemCard:nth-child(3) { transition-delay: 0.3s; }
+.stageActive .mockItemCard:nth-child(1) {
+    transition-delay: 0.1s;
+}
+
+.stageActive .mockItemCard:nth-child(2) {
+    transition-delay: 0.2s;
+}
+
+.stageActive .mockItemCard:nth-child(3) {
+    transition-delay: 0.3s;
+}
 
 .mockItemImg {
     width: 44px;
@@ -861,8 +918,16 @@
     gap: 2px;
 }
 
-.mockItemText b { font-size: 12px; color: var(--text); }
-.mockItemText span { font-size: 11px; color: var(--accent); font-weight: 700; }
+.mockItemText b {
+    font-size: 12px;
+    color: var(--text);
+}
+
+.mockItemText span {
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+}
 
 .qrBox {
     width: 120px;
@@ -886,12 +951,23 @@
 }
 
 @keyframes qrFadeOut {
-    to { opacity: 0; transform: scale(0.8); visibility: hidden; }
+    to {
+        opacity: 0;
+        transform: scale(0.8);
+        visibility: hidden;
+    }
 }
 
 @keyframes scanMove {
-    0%, 100% { top: 10%; }
-    50% { top: 90%; }
+
+    0%,
+    100% {
+        top: 10%;
+    }
+
+    50% {
+        top: 90%;
+    }
 }
 
 .scanLine {
@@ -937,8 +1013,8 @@
     flex-shrink: 0;
 }
 
-.miniMenu { 
-    width: 100%; 
+.miniMenu {
+    width: 100%;
     height: 200px;
     overflow: hidden;
     position: relative;
@@ -955,8 +1031,13 @@
 }
 
 @keyframes miniScroll {
-    from { transform: translateY(0); }
-    to { transform: translateY(-70%); }
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-70%);
+    }
 }
 
 .scrollTouch {
@@ -965,7 +1046,7 @@
     bottom: 20px;
     width: 30px;
     height: 30px;
-    background: rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.1);
     border: 3px solid #fff;
     border-radius: 50%;
     backdrop-filter: blur(4px);
@@ -975,9 +1056,21 @@
 }
 
 @keyframes touchMove {
-    0%, 100% { transform: translateY(0); opacity: 0; }
-    20%, 80% { opacity: 1; }
-    50% { transform: translateY(-150px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    20%,
+    80% {
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(-150px);
+    }
 }
 
 .miniItemCard {
@@ -991,10 +1084,24 @@
     flex-shrink: 0;
 }
 
-.miniImg { font-size: 18px; }
-.miniInfo { flex: 1; }
-.miniTitle { font-size: 11px; font-weight: 700; }
-.miniPrice { font-size: 10px; color: var(--accent); font-weight: 800; }
+.miniImg {
+    font-size: 18px;
+}
+
+.miniInfo {
+    flex: 1;
+}
+
+.miniTitle {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.miniPrice {
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 800;
+}
 
 /* Progress Indicator */
 .stepProgressContainer {
@@ -1030,10 +1137,24 @@
 }
 
 @media (max-width: 768px) {
-    .processVisual { padding: 30px 15px; border-radius: 24px; }
-    .processLine { display: none; }
-    .processTrack { gap: 10px; }
-    .stepIcon { width: 50px; height: 50px; font-size: 16px; }
+    .processVisual {
+        padding: 30px 15px;
+        border-radius: 24px;
+    }
+
+    .processLine {
+        display: none;
+    }
+
+    .processTrack {
+        gap: 10px;
+    }
+
+    .stepIcon {
+        width: 50px;
+        height: 50px;
+        font-size: 16px;
+    }
 }
 
 /* FEATURES */
@@ -1509,30 +1630,74 @@
         height: 32px;
     }
 
-    .navLinks {
-        position: static;
-        width: auto;
-        height: auto;
-        background: none;
-        flex-direction: row;
-        padding: 0;
-        border: none;
-        gap: 12px;
+    .menuToggle {
+        display: block;
     }
 
-    .navLinks a, .navDemo {
+    .navLinks {
         display: none !important;
     }
+}
 
-    .navAdmin {
-        padding: 8px 16px;
-        font-size: 14px;
-        display: flex !important;
-    }
+/* Mobile Menu Base Styles (Outside Media Query for safety) */
+.mobileMenu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.4s ease;
+}
 
-    .menuToggle {
-        display: none;
-    }
+.mobileMenuOpen {
+    display: flex;
+    opacity: 1;
+}
+
+.mobileMenuContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    padding: 40px;
+    text-align: center;
+}
+
+.mobileMenuContent a {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.mobileMenuDivider {
+    width: 60px;
+    height: 4px;
+    background: var(--accent-glow);
+    border-radius: 2px;
+}
+
+.navAdminMobile {
+    margin-top: 20px;
+    background: var(--accent);
+    color: #fff !important;
+    padding: 16px 40px !important;
+    border-radius: 16px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+@media (max-width: 1024px) {
+
 
     .hero {
         grid-template-columns: 1fr;
@@ -1545,6 +1710,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        animation: fadeInUp 0.8s ease-out;
     }
 
     .title {
@@ -1557,7 +1723,11 @@
     }
 
     .heroImageWrap {
-        margin-top: 20px;
+        margin-top: 40px;
+        animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        width: 100%;
+        display: flex;
+        justify-content: center;
     }
 
     .mockup {
@@ -1569,9 +1739,17 @@
         padding: 12px 18px;
         font-size: 14px;
         border-width: 3px;
-        right: -10px;
-        top: 15%;
+        right: 5%;
+        top: 20%;
         width: max-content;
+        z-index: 5;
+    }
+
+    .cardLower {
+        left: 5%;
+        right: auto;
+        top: auto;
+        bottom: 20%;
     }
 
     .floatingCard i {
@@ -1589,9 +1767,11 @@
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
     }
+
     .pricingGrid::-webkit-scrollbar {
         display: none;
     }
+
     .pricingCard {
         min-width: 300px;
         scroll-snap-align: center;
@@ -1607,9 +1787,11 @@
         padding-inline: 5%;
         scrollbar-width: none;
     }
+
     .testiGrid::-webkit-scrollbar {
         display: none;
     }
+
     .testiCard {
         min-width: 300px;
         scroll-snap-align: center;
@@ -1831,16 +2013,16 @@
     .testimonials {
         padding: 80px 0;
     }
-    
+
     .testiHeader {
         padding: 0 5%;
         margin-bottom: 40px;
     }
-    
+
     .testiTitle {
         font-size: 28px;
     }
-    
+
     .testiScrollWrap {
         overflow-x: auto;
         overscroll-behavior-x: contain;
@@ -1848,7 +2030,7 @@
         padding: 0 5% 40px 5%;
         scrollbar-width: none;
     }
-    
+
     .testiScrollWrap::-webkit-scrollbar {
         display: none;
     }
@@ -1857,7 +2039,7 @@
         width: max-content;
         gap: 16px;
     }
-    
+
     .testiCard {
         scroll-snap-align: center;
         width: 85vw;

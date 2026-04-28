@@ -4,7 +4,7 @@ import { useData } from '../../context/DataContext';
 import { useCart } from '../../context/CartContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../hooks/useToast';
-import { loadActiveDB } from '../../utils/storage';
+import { supabase } from '../../lib/supabase';
 import CartSheet from '../cart/CartSheet';
 import ItemModal from './ItemModal';
 import LanguageSelector from '../shared/LanguageSelector';
@@ -16,18 +16,52 @@ const FALLBACK_LOGO = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5
 
 export default function MenuPage() {
     const navigate = useNavigate();
-    const { db: contextDb, ownerEmail } = useData();
+    const { db: contextDb, ownerEmail: contextEmail } = useData();
     const { addToCart, setTableNumber, tableNumber } = useCart();
     const { t, lang, setLang } = useLanguage();
     const { message, visible, showToast } = useToast();
+    const [searchParams] = useSearchParams();
+    const isPreviewMode = searchParams.get('preview') === 'true';
+    const previewTab = searchParams.get('tab');
+    const ownerParam = searchParams.get('owner'); // from QR code
 
-    // Load from active owner's data (or context if available)
-    const activeDB = loadActiveDB();
-    const db = activeDB || contextDb;
+    // Load from Supabase if owner param is in URL
+    const [remoteDb, setRemoteDb] = useState(null);
+    const [loadingRemote, setLoadingRemote] = useState(false);
+
+    useEffect(() => {
+        if (!ownerParam) return;
+        setLoadingRemote(true);
+        
+        supabase
+            .from('menu_data')
+            .select('data')
+            .eq('owner_email', ownerParam)
+            .single()
+            .then(({ data: menuRow, error: menuErr }) => {
+                if (menuErr) console.error('Menu fetch error:', menuErr);
+                if (menuRow) setRemoteDb(menuRow.data);
+                setLoadingRemote(false);
+            });
+    }, [ownerParam]);
+
+    // Use remote data if owner param exists, else use logged-in user's data
+    const db = ownerParam ? remoteDb : contextDb;
+
+    // Loading state UI
+    if (loadingRemote) {
+        return (
+            <div className={styles.loadingPage}>
+                <div className={styles.spinner}></div>
+                <p>Menyu yüklənir...</p>
+            </div>
+        );
+    }
 
     // Check if user has actually configured their menu
-    // If they registered but haven't added items or restaurant name, show demo
     const hasUserContent = db && (db.items?.length > 0 || (db.restaurant?.name && db.restaurant.name.trim() !== ''));
+
+
 
     const DEMO_DB = {
         restaurant: {
@@ -118,9 +152,9 @@ export default function MenuPage() {
     const isDemo = !hasUserContent;
     const finalDb = hasUserContent ? db : DEMO_DB;
 
-    const R = finalDb.restaurant || {};
-    const CATS = finalDb.categories || [];
-    const ITEMS = finalDb.items || [];
+    const R = finalDb?.restaurant || {};
+    const CATS = finalDb?.categories || [];
+    const ITEMS = finalDb?.items || [];
 
 
     const [showTable, setShowTable] = useState(false);
@@ -129,14 +163,11 @@ export default function MenuPage() {
     const [searchOpen, setSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('');
-    const [searchParams] = useSearchParams();
-    const isPreviewMode = searchParams.get('preview') === 'true';
-    const previewTab = searchParams.get('tab');
     const searchRef = useRef(null);
 
     // Categories with "All" added at the start
     const allCategory = { id: 'all', name: t('all'), emoji: '🏠' };
-    const activeCats = [allCategory, ...CATS.filter(cat => ITEMS.some(i => i.catId === cat.id))];
+    const activeCats = [allCategory, ...(CATS || []).filter(cat => (ITEMS || []).some(i => i.catId === cat.id))];
 
     // Initial category
     useEffect(() => {
@@ -160,9 +191,9 @@ export default function MenuPage() {
         showToast(`✅ ${t('table')} #${tableInput} ${t('table_selected')}`);
     };
 
-    const filteredItems = activeCategory === 'all' 
+    const filteredItems = (activeCategory === 'all' 
         ? ITEMS 
-        : ITEMS.filter(item => item.catId === activeCategory);
+        : ITEMS.filter(item => item.catId === activeCategory)) || [];
 
     return (
         <div className={styles.page}>
@@ -177,7 +208,10 @@ export default function MenuPage() {
                             <i className={`fa-solid fa-${searchOpen ? 'xmark' : 'magnifying-glass'}`} />
                         </button>
                         <LanguageSelector />
-                        <Link to="/admin" className={styles.iconBtn} title="Admin Panel"><i className="fa-solid fa-user-gear" /></Link>
+                        <Link to="/admin" className={styles.loginBtn}>
+                            <i className="fa-solid fa-right-to-bracket" />
+                            <span>{t('login')}</span>
+                        </Link>
                     </div>
                 </div>
             )}
@@ -265,8 +299,8 @@ export default function MenuPage() {
             {/* MENU */}
             <main className={styles.menu}>
                 {ITEMS.length === 0 && (
-                    <div style={{ textAlign: 'center', padding: '60px 20px', color: '#888' }}>
-                        <i className="fa-solid fa-utensils" style={{ fontSize: 48, opacity: 0.15, marginBottom: 16, display: 'block' }} />
+                    <div className={styles.empty}>
+                        <i className="fa-solid fa-utensils" />
                         <p>{t('menu_empty')}</p>
                     </div>
                 )}
@@ -290,7 +324,7 @@ export default function MenuPage() {
                                     ? `🏠 ${t('all_foods')}` 
                                     : `${activeCats.find(c => c.id === activeCategory)?.emoji || '🍴'} ${activeCats.find(c => c.id === activeCategory)?.name || t('foods')}`
                                 } 
-                                <span style={{fontSize: '14px', opacity: 0.5, marginLeft: '8px'}}>({filteredItems.length})</span>
+                                <span style={{fontSize: '14px', opacity: 0.5, marginLeft: '8px'}}>({filteredItems?.length || 0})</span>
                             </span>
                             <div className={styles.sectionLine} />
                         </div>
@@ -368,7 +402,7 @@ function ItemCard({ item, onAdd, onClick }) {
 
                 <div className={styles.cardFooter}>
                     <div className={styles.priceContainer}>
-                        <span className={styles.cardPrice}>{item.price.toFixed(2)}</span>
+                        <span className={styles.cardPrice}>{Number(item.price || 0).toFixed(2)}</span>
                         <span className={styles.currency}>AZN</span>
                     </div>
                     <button className={styles.addBtn} onClick={e => { e.stopPropagation(); onAdd(item); }}>
