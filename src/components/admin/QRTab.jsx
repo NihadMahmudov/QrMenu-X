@@ -15,11 +15,9 @@ export default function QRTab({ showToast }) {
         : window.location.origin;
         
     // Do not encode the @ symbol to prevent mobile QR scanners from misinterpreting %40.
-    // Also, add a cache-busting timestamp (&t=...) so mobile browsers NEVER load a cached 404 page!
-    const cacheBuster = Date.now();
     const menuUrl = ownerEmail
-        ? `${base}/menu?owner=${ownerEmail}&t=${cacheBuster}`
-        : `${base}/menu?t=${cacheBuster}`;
+        ? `${base}/menu?owner=${ownerEmail}`
+        : `${base}/menu`;
 
     const copyLink = async () => {
         try {

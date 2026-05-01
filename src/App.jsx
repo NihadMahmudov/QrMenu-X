@@ -6,6 +6,9 @@ import LandingPage from './components/landing/LandingPage';
 import MenuPage from './components/menu/MenuPage';
 import AdminPage from './components/admin/AdminPage';
 
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
+
 export default function App() {
     return (
         <LanguageProvider>
@@ -18,6 +21,8 @@ export default function App() {
                             <Route path="/admin" element={<AdminPage />} />
                             <Route path="*" element={<LandingPage />} />
                         </Routes>
+                        <Analytics />
+                        <SpeedInsights />
                     </BrowserRouter>
                 </CartProvider>
             </DataProvider>

@@ -39,21 +39,46 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
 
     useEffect(() => {
         if (!activeCategory) setActiveCategory('all');
-    }, [activeCategory]);
+        
+        // Auto-set table from URL if present (?table=5)
+        const tableParam = searchParams.get('table');
+        if (tableParam && !tableNumber) {
+            setTableNumber(tableParam);
+        }
+    }, [activeCategory, searchParams, tableNumber, setTableNumber]);
 
     useEffect(() => {
         if (!ownerParam) return;
-        setLoadingRemote(true);
+        
+        // 1. Check cache first for instant load
+        const cacheKey = `menu_cache_${ownerParam}`;
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) {
+            try {
+                setRemoteDb(JSON.parse(cached));
+            } catch (e) {
+                console.error("Cache parse error", e);
+            }
+        } else {
+            setLoadingRemote(true);
+        }
 
+        // 2. Fetch fresh data
         supabase
             .from('menu_data')
             .select('data')
             .ilike('owner_email', ownerParam)
             .single()
             .then(({ data: menuRow, error: menuErr }) => {
+                if (menuRow) {
+                    setRemoteDb(menuRow.data);
+                    // Update cache
+                    localStorage.setItem(cacheKey, JSON.stringify(menuRow.data));
+                }
                 if (menuErr) console.error('Menu fetch error:', menuErr);
-                if (menuRow) setRemoteDb(menuRow.data);
-                setLoadingRemote(false);
+            })
+            .finally(() => {
+                setLoadingRemote(false); // ALWAYS stop the spinner
             });
     }, [ownerParam]);
 
@@ -102,7 +127,7 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
         ],
         items: [
             // Şorbalar
-            { id: 'i1', catId: 'cat_1', name: 'Mərci Şorbası', desc: 'Tərkibi: Qırmızı mərci, soğan, yerkökü, kərə yağı, nanə qurusu, yan yanında limonla', price: 4.00, imgUrl: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80', badge: 'Populyar' },
+
             { id: 'i2', catId: 'cat_1', name: 'Göbələk Kremi', desc: 'Tərkibi: Təzə şampinyon göbələyi, qaymaq, soğan, kərə yağı, qara istiot, kruton', price: 5.00, imgUrl: 'https://images.unsplash.com/photo-1548943487-a2e4b43b485b?w=600&q=80', badge: '' },
             { id: 'i3', catId: 'cat_1', name: 'Düşbərə', desc: 'Tərkibi: Xırda xəmir içərisində mal əti, bulyon, sirkə-sarımsaq və quru nanə', price: 6.00, imgUrl: 'https://images.unsplash.com/photo-1555126634-323283e090fa?w=600&q=80', badge: '' },
 
@@ -161,8 +186,9 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
         ]
     };
 
-    const isDemo = !hasUserContent;
-    const finalDb = hasUserContent ? db : DEMO_DB;
+    // Only show demo if NO owner is specified AND the user has no content (landing page preview)
+    const isDemo = !hasUserContent && !ownerParam;
+    const finalDb = hasUserContent ? db : (isDemo ? DEMO_DB : { items: [], categories: [], restaurant: {} });
 
     const R = finalDb?.restaurant || {};
     const CATS = finalDb?.categories || [];
@@ -172,6 +198,15 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
     // Categories with "All" added at the start
     const allCategory = { id: 'all', name: t('all'), emoji: '🏠' };
     const activeCats = [allCategory, ...(CATS || []).filter(cat => (ITEMS || []).some(i => i.catId === cat.id))];
+
+    // Helper: Format Social Links
+    const getSocialLink = (platform, val) => {
+        if (!val) return platform === 'instagram' ? "https://instagram.com" : "https://tiktok.com";
+        if (val.startsWith('http')) return val;
+        if (platform === 'instagram') return `https://instagram.com/${val.replace('@', '')}`;
+        if (platform === 'tiktok') return `https://tiktok.com/@${val.replace('@', '')}`;
+        return val;
+    };
 
     // Helper: Format WhatsApp number correctly for the wa.me API
     const getWaLink = (num) => {
@@ -260,8 +295,8 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
                         </div>
                         {/* Show socials with fallbacks if empty so they remain visible for demo/preview */}
                         <div className={styles.heroSocials}>
-                            <a href={R.instagram || "https://instagram.com"} target="_blank" rel="noreferrer" className={styles.socialIcon}><i className="fa-brands fa-instagram" /></a>
-                            <a href={R.tiktok || "https://tiktok.com"} target="_blank" rel="noreferrer" className={styles.socialIcon}><i className="fa-brands fa-tiktok" /></a>
+                            <a href={getSocialLink('instagram', R.instagram)} target="_blank" rel="noreferrer" className={styles.socialIcon}><i className="fa-brands fa-instagram" /></a>
+                            <a href={getSocialLink('tiktok', R.tiktok)} target="_blank" rel="noreferrer" className={styles.socialIcon}><i className="fa-brands fa-tiktok" /></a>
                             <a href={getWaLink(R.whatsapp)} target="_blank" rel="noreferrer" className={styles.socialIcon}><i className="fa-brands fa-whatsapp" /></a>
                         </div>
                         <div className={styles.heroActions}>
@@ -352,8 +387,8 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
                         <p>Bizi sosial şəbəkələrdə izləyin</p>
                         
                         <div className={styles.footerSocials}>
-                            <a href={R.instagram || "https://instagram.com"} target="_blank" rel="noreferrer"><i className="fa-brands fa-instagram" /></a>
-                            <a href={R.tiktok || "https://tiktok.com"} target="_blank" rel="noreferrer"><i className="fa-brands fa-tiktok" /></a>
+                            <a href={getSocialLink('instagram', R.instagram)} target="_blank" rel="noreferrer"><i className="fa-brands fa-instagram" /></a>
+                            <a href={getSocialLink('tiktok', R.tiktok)} target="_blank" rel="noreferrer"><i className="fa-brands fa-tiktok" /></a>
                             <a href={getWaLink(R.whatsapp)} target="_blank" rel="noreferrer"><i className="fa-brands fa-whatsapp" /></a>
                         </div>
                         <div className={styles.footerCopy}>© {new Date().getFullYear()} Bütün hüquqlar qorunur.</div>
@@ -386,13 +421,7 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
     );
 }
 
-// Item Card — NO FAVORITE ICON
 function ItemCard({ item, onAdd, onClick }) {
-    // Demo stats for visual parity with the request
-    const time = 5;
-    const kcal = 5;
-    const rating = 4.7;
-
     return (
         <div className={styles.card} onClick={() => onClick(item)}>
             {item.badge && <div className={styles.badge2}>{item.badge}</div>}
@@ -402,27 +431,6 @@ function ItemCard({ item, onAdd, onClick }) {
             <div className={styles.cardBody}>
                 <div className={styles.cardName}>{item.name}</div>
                 <div className={styles.cardDesc}>{item.desc}</div>
-
-                <div className={styles.itemStats}>
-                    <div className={styles.statItem}>
-                        <i className="fa-regular fa-clock" />
-                        <span>{time} dəq</span>
-                    </div>
-                    <div className={styles.statItem}>
-                        <i className="fa-solid fa-fire" />
-                        <span>{kcal} kcal</span>
-                    </div>
-                    <div className={styles.statItem}>
-                        <div className={styles.stars}>
-                            <i className="fa-solid fa-star" />
-                            <i className="fa-solid fa-star" />
-                            <i className="fa-solid fa-star" />
-                            <i className="fa-solid fa-star" />
-                            <i className="fa-solid fa-star" />
-                        </div>
-                        <span className={styles.ratingValue}>{rating}</span>
-                    </div>
-                </div>
 
                 <div className={styles.cardFooter}>
                     <div className={styles.priceContainer}>

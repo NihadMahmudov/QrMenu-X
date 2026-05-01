@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import LanguageSelector from '../shared/LanguageSelector';
 import styles from './LandingPage.module.css';
+import ThreeModelViewer from '../shared/ThreeModelViewer';
 
 export default function LandingPage() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -111,6 +112,53 @@ export default function LandingPage() {
                         <div className={styles.statIcon}><i className="fa-solid fa-star" /></div>
                         <h3>4.9/5</h3>
                         <p>{t('stat_3_label')}</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* New 3D Feature: Holographic Podium */}
+            <section className={styles.modern3DSection}>
+                <div className={styles.modern3DContainer}>
+                    <div className={styles.modern3DText}>
+                        <span className={styles.techBadge}>AI & 3D Texnologiyası</span>
+                        <h2>Müştərilərinizə <br/><span className={styles.gradientText}>Yeni Təcrübə</span> Yaşadın</h2>
+                        <p>
+                            Statik şəkilləri unudun. Restoranınızın menyusunu interaktiv 3D modellərlə zənginləşdirin. 
+                            Müştərilər yeməkləri hər bucaqdan incələyə və masanın üzərində görə bilərlər.
+                        </p>
+                        <div className={styles.featureListMini}>
+                            <div className={styles.miniFeat}>
+                                <i className="fa-solid fa-microchip" />
+                                <span>Ultra Sürətli Yüklənmə</span>
+                            </div>
+                            <div className={styles.miniFeat}>
+                                <i className="fa-solid fa-expand" />
+                                <span>AR (Artırılmış Reallıq) Dəstəyi</span>
+                            </div>
+                        </div>
+                        <Link to="/menu" className={styles.ctaButton3D}>
+                            Sınaqdan Keçir <i className="fa-solid fa-chevron-right" />
+                        </Link>
+                    </div>
+                    
+                    <div className={styles.modern3DVisual}>
+                        <div className={styles.holoStage}>
+                            <ThreeModelViewer 
+                                modelUrl="/model-optimized.glb" 
+                                height="100%" 
+                                yOffset={1.0} 
+                                cameraZFactor={1.3} 
+                            />
+                            {/* Floating Tech Labels */}
+                            <div className={`${styles.techLabel} ${styles.labelTop}`}>
+                                <div className={styles.dot}></div>
+                                <span>Fotorealistik Detallar</span>
+                            </div>
+                            <div className={`${styles.techLabel} ${styles.labelBottom}`}>
+                                <div className={styles.dot}></div>
+                                <span>360° Rotasiya</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
