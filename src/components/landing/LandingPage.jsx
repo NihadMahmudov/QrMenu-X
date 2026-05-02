@@ -163,6 +163,7 @@ export default function LandingPage() {
                 </div>
             </section>
 
+
             {/* How It Works */}
             <section id="how" className={styles.howItWorks}>
                 <h2 className={styles.sectionTitle}>{t('how_it_works')}</h2>
