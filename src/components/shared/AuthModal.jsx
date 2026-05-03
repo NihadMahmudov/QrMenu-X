@@ -30,6 +30,7 @@ export default function AuthModal({ onClose, onLogin }) {
         setTab('forgot_sent');
     };
 
+    const [showPassword, setShowPassword] = useState(false);
 
     return (
         <div className={styles.overlay} onClick={e => e.target === e.currentTarget && onClose()}>
@@ -48,13 +49,27 @@ export default function AuthModal({ onClose, onLogin }) {
                         </div>
                         <div className={styles.field}>
                             <label>Şifrə</label>
-                            <div className={styles.inputWrap}><i className="fa-solid fa-lock" /><input type="password" placeholder="••••••••" onChange={e => set('password', e.target.value)} /></div>
+                            <div className={styles.inputWrap}>
+                                <i className="fa-solid fa-lock" />
+                                <input 
+                                    type={showPassword ? "text" : "password"} 
+                                    placeholder="••••••••" 
+                                    onChange={e => set('password', e.target.value)} 
+                                />
+                                <button 
+                                    type="button"
+                                    className={styles.showBtn} 
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    <i className={`fa-solid fa-eye${showPassword ? '-slash' : ''}`} />
+                                </button>
+                            </div>
                             <div className={styles.forgotLink} onClick={() => { setTab('forgot'); setError(''); }}>Şifrəmi unutdum?</div>
                         </div>
                         <button className={styles.btn} onClick={handleLogin}>Daxil Ol</button>
                         <p className={styles.switch}>Hesabınız yoxdur? <span onClick={() => { setTab('register'); setError(''); }}>Qeydiyyat</span></p>
                     </>
-                ) : (
+                ) : tab === 'register' ? (
                     <>
                         <h2 className={styles.title}>Qeydiyyat</h2>
                         <p className={styles.sub}>Yeni hesab yaradın</p>
@@ -69,7 +84,21 @@ export default function AuthModal({ onClose, onLogin }) {
                         </div>
                         <div className={styles.field}>
                             <label>Şifrə</label>
-                            <div className={styles.inputWrap}><i className="fa-solid fa-lock" /><input type="password" placeholder="Min. 6 simvol" onChange={e => set('password', e.target.value)} /></div>
+                            <div className={styles.inputWrap}>
+                                <i className="fa-solid fa-lock" />
+                                <input 
+                                    type={showPassword ? "text" : "password"} 
+                                    placeholder="Min. 6 simvol" 
+                                    onChange={e => set('password', e.target.value)} 
+                                />
+                                <button 
+                                    type="button"
+                                    className={styles.showBtn} 
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    <i className={`fa-solid fa-eye${showPassword ? '-slash' : ''}`} />
+                                </button>
+                            </div>
                         </div>
                         <button className={styles.btn} onClick={handleRegister}>Qeydiyyatdan Keç</button>
                         <p className={styles.switch}>Hesabınız var? <span onClick={() => { setTab('login'); setError(''); }}>Daxil Ol</span></p>

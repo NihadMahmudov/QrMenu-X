@@ -5,7 +5,6 @@ import styles from './SettingsSelector.module.css';
 export default function SettingsSelector() {
     const { t } = useLanguage();
     const [open, setOpen] = useState(false);
-    const [theme, setTheme] = useState('light');
     const ref = useRef(null);
 
     useEffect(() => {
@@ -17,10 +16,6 @@ export default function SettingsSelector() {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
-
-    const toggleTheme = () => {
-        setTheme(theme === 'light' ? 'dark' : 'light');
-    };
 
     return (
         <div className={styles.container} ref={ref}>
@@ -35,16 +30,6 @@ export default function SettingsSelector() {
                     </div>
                     
                     <div className={styles.section}>
-                        <div className={styles.option} onClick={toggleTheme}>
-                            <div className={styles.optionLeft}>
-                                <i className={`fa-solid fa-${theme === 'light' ? 'moon' : 'sun'}`} />
-                                <span className={styles.optionLabel}>{t('theme')}</span>
-                            </div>
-                            <span className={styles.badge}>
-                                {theme === 'light' ? t('theme_dark') : t('theme_light')}
-                            </span>
-                        </div>
-
                         <div className={styles.option}>
                             <div className={styles.optionLeft}>
                                 <i className="fa-solid fa-circle-question" />

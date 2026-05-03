@@ -491,7 +491,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 100px;
+    min-width: 80px;
+    flex-shrink: 0;
 }
 
 .stepsGrid {
@@ -531,8 +532,8 @@
 .stepText {
     display: flex;
     flex-direction: column;
-    text-align: justify;
-    gap: 8px;
+    text-align: left;
+    gap: 6px;
 }
 
 .stepActive {
@@ -611,12 +612,14 @@
 }
 
 .stepLabel {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     color: var(--muted);
     transition: color 0.3s;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .stepIconActive .stepLabel {
@@ -1005,6 +1008,8 @@
     color: var(--text);
     overflow: hidden;
     position: relative;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .modern3DContainer {
@@ -1014,6 +1019,7 @@
     grid-template-columns: 1fr 1.2fr;
     gap: 100px;
     align-items: center;
+    width: 100%;
 }
 
 .techBadge {
@@ -1167,72 +1173,116 @@
 
 @media (max-width: 968px) {
     .modern3DSection {
-        padding: 80px 5%;
+        padding: 60px 6%;
+        overflow-x: hidden;
     }
 
     .modern3DContainer {
         grid-template-columns: 1fr;
         gap: 40px;
         text-align: center;
+        width: 100%;
+    }
+
+    .modern3DText {
+        width: 100%;
+        overflow: hidden;
     }
 
     .modern3DVisual {
         order: -1;
         width: 100%;
-        max-width: 500px;
+        max-width: 400px;
         margin: 0 auto;
     }
 
     .modern3DText h2 {
-        margin-bottom: 20px;
+        font-size: clamp(20px, 6vw, 36px);
+        margin-bottom: 16px;
         word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
     }
 
     .modern3DText p {
-        font-size: 16px;
-        max-width: 500px;
+        font-size: 15px;
+        max-width: 100%;
         margin-left: auto;
         margin-right: auto;
+        overflow-wrap: break-word;
     }
 
     .featureListMini {
         align-items: center;
     }
 
+    .miniFeat {
+        justify-content: center;
+    }
 
     .techLabel {
-        display: none; /* Hide labels on tablet/mobile for cleaner look */
+        display: none;
     }
 
     .ctaButton3D {
         width: 100%;
-        max-width: 320px;
+        max-width: 300px;
         justify-content: center;
     }
 }
 
 @media (max-width: 640px) {
     .modern3DSection {
-        padding: 60px 5%;
+        padding: 50px 5%;
+    }
+
+    .modern3DText h2 {
+        font-size: clamp(18px, 5.5vw, 28px);
+    }
+
+    .modern3DText p {
+        font-size: 14px;
+    }
+
+    .techBadge {
+        font-size: 11px;
     }
 }
 
 @media (max-width: 480px) {
     .modern3DSection {
-        padding: 60px 20px;
+        padding: 40px 16px;
     }
-    
+
     .modern3DVisual {
         max-width: 100%;
+    }
+
+    .holoStage {
+        height: clamp(220px, 50vw, 320px);
     }
 }
 
 @media (max-width: 380px) {
     .modern3DSection {
-        padding: 50px 15px;
+        padding: 36px 12px;
+    }
+    .modern3DText h2 {
+        font-size: 18px;
     }
     .modern3DText p {
-        font-size: 14px;
+        font-size: 13px;
+    }
+}
+
+/* 445px-dən kiçik ekranlarda 3D model gizlədilir */
+@media (max-width: 445px) {
+    .modern3DVisual {
+        display: none;
+    }
+
+    .modern3DContainer {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -2103,8 +2153,26 @@
     }
 
     .stepCard {
-        align-items: center;
-        text-align: center;
+        align-items: flex-start;
+        text-align: left;
+        gap: 16px;
+    }
+
+    .stepText {
+        text-align: left;
+    }
+
+    .stepRow {
+        gap: 20px;
+    }
+
+    .indicatorWrap {
+        min-width: 70px;
+    }
+
+    .stepLabel {
+        font-size: 10px;
+        letter-spacing: 0;
     }
 
     .featuresGrid {

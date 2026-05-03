@@ -54,6 +54,7 @@ export default function AdminPage() {
     };
 
     const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
+    const [showPassword, setShowPassword] = useState(false);
 
     // ===== SUPABASE AUTH =====
     const handleLogin = async () => {
@@ -239,7 +240,23 @@ export default function AdminPage() {
                         </div>
                         <div className={styles.field}>
                             <label>{t('password')}</label>
-                            <div className={styles.inp}><i className="fa-solid fa-lock" /><input type="password" placeholder="••••••••" value={form.password} onChange={e => set('password', e.target.value)} onKeyDown={e => e.key === 'Enter' && (authTab === 'login' ? handleLogin() : handleRegister())} /></div>
+                            <div className={styles.inp}>
+                                <i className="fa-solid fa-lock" />
+                                <input 
+                                    type={showPassword ? "text" : "password"} 
+                                    placeholder="••••••••" 
+                                    value={form.password} 
+                                    onChange={e => set('password', e.target.value)} 
+                                    onKeyDown={e => e.key === 'Enter' && (authTab === 'login' ? handleLogin() : handleRegister())} 
+                                />
+                                <button 
+                                    type="button" 
+                                    className={styles.showBtn} 
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    <i className={`fa-solid fa-eye${showPassword ? '-slash' : ''}`} />
+                                </button>
+                            </div>
                             {authTab === 'login' && <div className={styles.forgotLink} onClick={() => { setAuthTab('forgot'); setError(''); }}>{t('forgot_password')}</div>}
                         </div>
                         <button className={styles.authBtn} onClick={authTab === 'login' ? handleLogin : handleRegister} disabled={authLoading}>

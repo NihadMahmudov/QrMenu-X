@@ -31,7 +31,7 @@ export default function LandingPage() {
                     <img src="/logo.png" alt="Logo" className={styles.logoImg} />
                     <span>{t('brand_name')}</span>
                 </Link>
-                
+
                 {/* Desktop and Mobile Shared Right Side */}
                 <div className={styles.navRight}>
                     <div className={styles.navLinksText}>
@@ -121,9 +121,9 @@ export default function LandingPage() {
                 <div className={styles.modern3DContainer}>
                     <div className={styles.modern3DText}>
                         <span className={styles.techBadge}>AI & 3D Texnologiyası</span>
-                        <h2>Müştərilərinizə <br/><span className={styles.gradientText}>Yeni Təcrübə</span> Yaşadın</h2>
+                        <h2>Müştərilərinizə <br /><span className={styles.gradientText}>Yeni Təcrübə</span> Yaşadın</h2>
                         <p>
-                            Statik şəkilləri unudun. Restoranınızın menyusunu interaktiv 3D modellərlə zənginləşdirin. 
+                            Statik şəkilləri unudun. Restoranınızın menyusunu interaktiv 3D modellərlə zənginləşdirin.
                             Müştərilər yeməkləri hər bucaqdan incələyə və masanın üzərində görə bilərlər.
                         </p>
                         <div className={styles.featureListMini}>
@@ -140,14 +140,14 @@ export default function LandingPage() {
                             Sınaqdan Keçir <i className="fa-solid fa-chevron-right" />
                         </Link>
                     </div>
-                    
+
                     <div className={styles.modern3DVisual}>
                         <div className={styles.holoStage}>
-                            <ThreeModelViewer 
-                                modelUrl="/model-optimized.glb" 
-                                height="100%" 
-                                yOffset={1.0} 
-                                cameraZFactor={1.3} 
+                            <ThreeModelViewer
+                                modelUrl="/model-optimized.glb"
+                                height="100%"
+                                yOffset={1.0}
+                                cameraZFactor={1.3}
                             />
                             {/* Floating Tech Labels */}
                             <div className={`${styles.techLabel} ${styles.labelTop}`}>
@@ -177,7 +177,7 @@ export default function LandingPage() {
                                     {/* Registration Stage */}
                                     <div className={`${styles.stage} ${activeStep === 1 ? styles.stageActive : ''}`}>
                                         <div className={styles.mockupHeaderLogo}>
-                                            <i className="fa-solid fa-qrcode" /> QR Menyu
+                                            <i className="fa-solid fa-qrcode" />
                                         </div>
                                         <div className={styles.stageContent}>
                                             <div className={styles.mockInp}>
@@ -198,7 +198,7 @@ export default function LandingPage() {
                                     {/* Menu Creation Stage */}
                                     <div className={`${styles.stage} ${activeStep === 2 ? styles.stageActive : ''}`}>
                                         <div className={styles.mockupHeaderLogo}>
-                                            <i className="fa-solid fa-qrcode" /> QR Menyu
+                                            <i className="fa-solid fa-qrcode" />
                                         </div>
                                         <div className={styles.mockupProfile}>
                                             <div className={styles.mockupAvatar}>🥩</div>
@@ -353,7 +353,7 @@ export default function LandingPage() {
                     <h2 className={styles.testiTitle}>{t('testi_title')}</h2>
                     <p>{t('testi_desc')}</p>
                 </div>
-                
+
                 <div className={styles.testiScrollWrap}>
                     <div className={styles.testiGrid}>
                         {/* Card 1 */}
@@ -364,7 +364,7 @@ export default function LandingPage() {
                             </div>
                             <p className={styles.testiText}>{t('testi_1')}</p>
                             <div className={styles.testiAuthor}>
-                                <div className={styles.testiAvatar} style={{backgroundColor: '#FF6B6B'}}>BC</div>
+                                <div className={styles.testiAvatar} style={{ backgroundColor: '#FF6B6B' }}>BC</div>
                                 <div className={styles.testiInfo}>
                                     <h4>Baku Central</h4>
                                     <span>{t('testi_type_1')}</span>
@@ -380,7 +380,7 @@ export default function LandingPage() {
                             </div>
                             <p className={styles.testiText}>{t('testi_2')}</p>
                             <div className={styles.testiAuthor}>
-                                <div className={styles.testiAvatar} style={{backgroundColor: '#4ECDC4'}}>L9</div>
+                                <div className={styles.testiAvatar} style={{ backgroundColor: '#4ECDC4' }}>L9</div>
                                 <div className={styles.testiInfo}>
                                     <h4>Lounge 99</h4>
                                     <span>{t('testi_type_2')}</span>
@@ -396,7 +396,7 @@ export default function LandingPage() {
                             </div>
                             <p className={styles.testiText}>{t('testi_3')}</p>
                             <div className={styles.testiAuthor}>
-                                <div className={styles.testiAvatar} style={{backgroundColor: '#FFD166', color: '#000'}}>KE</div>
+                                <div className={styles.testiAvatar} style={{ backgroundColor: '#FFD166', color: '#000' }}>KE</div>
                                 <div className={styles.testiInfo}>
                                     <h4>Kabab Evi</h4>
                                     <span>{t('testi_type_3')}</span>

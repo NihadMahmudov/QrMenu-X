@@ -248,9 +248,6 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
                         <button onClick={() => navigate(-1)} className={styles.iconBtn} title="Geri"><i className="fa-solid fa-arrow-left" /></button>
                     </div>
                     <div className={styles.topRight}>
-                        <button className={styles.iconBtn} onClick={() => { setSearchOpen(p => !p); setTimeout(() => searchRef.current?.focus(), 200); }}>
-                            <i className={`fa-solid fa-${searchOpen ? 'xmark' : 'magnifying-glass'}`} />
-                        </button>
                         <LanguageSelector />
                         <Link to="/admin" className={styles.loginBtn}>
                             <i className="fa-solid fa-right-to-bracket" />
@@ -310,15 +307,24 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
             {/* CATEGORY NAV */}
             {!searchResults && activeCats.length > 0 && (
                 <nav className={`${styles.catNav} ${isPreviewMode ? styles.catNavPreview : ''}`}>
-                    <ul>
-                        {activeCats.map(cat => (
-                            <li key={cat.id}>
-                                <button className={`${styles.catLink} ${activeCategory === cat.id ? styles.catLinkActive : ''}`} onClick={() => setActiveCategory(cat.id)}>
-                                    {cat.emoji} {cat.name}
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
+                    <div className={styles.catNavContent}>
+                        <button 
+                            className={`${styles.catSearchBtn} ${searchOpen ? styles.catSearchBtnActive : ''}`} 
+                            onClick={() => { setSearchOpen(p => !p); setTimeout(() => searchRef.current?.focus(), 200); }}
+                            title={t('search')}
+                        >
+                            <i className={`fa-solid fa-${searchOpen ? 'xmark' : 'magnifying-glass'}`} />
+                        </button>
+                        <ul>
+                            {activeCats.map(cat => (
+                                <li key={cat.id}>
+                                    <button className={`${styles.catLink} ${activeCategory === cat.id ? styles.catLinkActive : ''}`} onClick={() => setActiveCategory(cat.id)}>
+                                        {cat.emoji} {cat.name}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </nav>
             )}
 

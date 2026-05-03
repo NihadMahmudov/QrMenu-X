@@ -164,6 +164,22 @@
     font-size: 15px
 }
 
+.showBtn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--tr);
+}
+
+.showBtn:hover {
+    color: var(--accent);
+}
+
 .authBtn {
     width: 100%;
     padding: 13px;
