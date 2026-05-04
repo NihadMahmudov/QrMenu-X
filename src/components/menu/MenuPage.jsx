@@ -67,7 +67,7 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
         supabase
             .from('menu_data')
             .select('data')
-            .ilike('owner_email', ownerParam)
+            .eq('owner_email', ownerParam)
             .single()
             .then(({ data: menuRow, error: menuErr }) => {
                 if (menuRow) {
@@ -241,8 +241,8 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
 
     return (
         <div className={styles.page}>
-            {/* TOP BAR */}
-            {!isPreviewMode && (
+            {/* TOP BAR - Hide if in preview or if opened via QR (ownerParam exists) */}
+            {!isPreviewMode && !ownerParam && (
                 <div className={styles.topBar}>
                     <div className={styles.topLeft}>
                         <button onClick={() => navigate(-1)} className={styles.iconBtn} title="Geri"><i className="fa-solid fa-arrow-left" /></button>

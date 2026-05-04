@@ -1,12 +1,54 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+// Helper to load external scripts
+const loadScript = (src) => {
+    return new Promise((resolve, reject) => {
+        if (document.querySelector(`script[src="${src}"]`)) {
+            resolve();
+            return;
+        }
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+};
 
 export default function ThreeModelViewer({ modelUrl, height = '100%', yOffset = 0, cameraZFactor = 1.3 }) {
     const mountRef = useRef(null);
+    const [scriptsLoaded, setScriptsLoaded] = useState(false);
 
     useEffect(() => {
-        if (!window.THREE || !window.MeshoptDecoder) return;
-        const THREE = window.THREE;
+        const loadAll = async () => {
+            try {
+                if (!window.THREE) {
+                    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js');
+                }
+                if (!window.THREE.GLTFLoader) {
+                    await loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js');
+                }
+                if (!window.THREE.OrbitControls) {
+                    await loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js');
+                }
+                if (!window.MeshoptDecoder) {
+                    await loadScript('https://unpkg.com/meshoptimizer@0.18.1/meshopt_decoder.js');
+                    if (window.MeshoptDecoder) {
+                        await window.MeshoptDecoder.ready;
+                    }
+                }
+                setScriptsLoaded(true);
+            } catch (err) {
+                console.error("3D scripts load failed:", err);
+            }
+        };
+        loadAll();
+    }, []);
+
+    useEffect(() => {
+        if (!scriptsLoaded || !mountRef.current) return;
         
+        const THREE = window.THREE;
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 1000);
         
@@ -58,7 +100,6 @@ export default function ThreeModelViewer({ modelUrl, height = '100%', yOffset = 
             const center = box.getCenter(new THREE.Vector3());
             const size = box.getSize(new THREE.Vector3());
             
-            // Modeli, kameranı və hədəfi eyni yOffset səviyyəsinə qaldırırıq
             model.position.x = -center.x;
             model.position.y = -center.y + yOffset; 
             model.position.z = -center.z;
@@ -68,7 +109,6 @@ export default function ThreeModelViewer({ modelUrl, height = '100%', yOffset = 
             const fov = camera.fov * (Math.PI / 180);
             let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * cameraZFactor;
             
-            // Kamera həm modelin hündürlüyündədir, həm də bir az yuxarıdan baxır
             camera.position.set(0, yOffset + (cameraZ * 0.5), cameraZ);
             controls.target.set(0, yOffset, 0); 
             controls.update();
@@ -76,7 +116,6 @@ export default function ThreeModelViewer({ modelUrl, height = '100%', yOffset = 
 
         let frameId;
         const animate = () => {
-            // Hədəfi hər kadrda yOffset-ə kilidləyirik
             controls.target.y = yOffset;
             controls.update();
             
@@ -92,7 +131,7 @@ export default function ThreeModelViewer({ modelUrl, height = '100%', yOffset = 
             if (mountRef.current) mountRef.current.innerHTML = '';
             controls.dispose();
         };
-    }, [modelUrl, yOffset, cameraZFactor]);
+    }, [scriptsLoaded, modelUrl, yOffset, cameraZFactor]);
 
-    return <div ref={mountRef} style={{ width: '100%', height }} />;
+    return <div ref={mountRef} style={{ width: '100%', height, minHeight: '200px' }} />;
 }

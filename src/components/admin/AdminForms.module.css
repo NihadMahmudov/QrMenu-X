@@ -25,10 +25,13 @@
 .inlineForm{display:flex;gap:10px;align-items:center}
 .addBtn{display:flex;align-items:center;gap:12px;padding:11px 18px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;transition:var(--tr);box-shadow:0 6px 15px var(--primary-glow)}
 .addBtn:hover{transform:translateY(-2px);box-shadow:0 10px 20px var(--primary-glow);background:#d9481b}
+.iconSelectBtn{width:54px;height:54px;flex-shrink:0;background:var(--card2);border:4px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);transition:var(--tr)}
+.iconSelectBtn:hover{border-color:var(--accent);color:var(--accent)}
 /* LIST */
 .list{display:flex;flex-direction:column;gap:10px}
 .row{display:flex;align-items:center;gap:20px;background:var(--card);border:4px solid var(--border);border-radius:var(--radius);padding:14px 18px;transition:var(--tr);box-shadow:0 2px 8px rgba(0,0,0,0.02)}
 .row:hover{border-color:var(--accent);box-shadow:0 8px 20px rgba(0,0,0,0.05);transform:translateY(-2px)}
+.rowIcon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--card2);border:2px solid var(--border);border-radius:10px;color:var(--accent);flex-shrink:0}
 .rowEmoji{font-size:22px;width:32px;text-align:center}
 .rowName{flex:1;font-weight:600;color:var(--text)}
 .rowCount{font-size:13px;color:var(--muted)}
