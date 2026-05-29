@@ -334,6 +334,13 @@
     color: #f15a24;
 }
 
+.noPriceLabel {
+    font-size: 13px;
+    font-style: italic;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
 .addBtn {
     width: 54px;
     height: 54px;

@@ -32,7 +32,12 @@ export default function ItemModal({ item, onClose, onAdd }) {
                     <h2 className={styles.name}>{item.name}</h2>
                     <p className={styles.desc}>{item.desc}</p>
                     <div className={styles.footer}>
-                        <div className={styles.price}>{item.price.toFixed(2)} <span>₼</span></div>
+                        <div className={styles.price}>
+                            {item.price
+                                ? <>{Number(item.price).toFixed(2)} <span>₼</span></>
+                                : <span style={{ fontSize: '14px', opacity: 0.7, fontStyle: 'italic' }}>Qiymət qeyd olunmayıb</span>
+                            }
+                        </div>
                         <button className={styles.addBtn} onClick={() => { onAdd(item); onClose(); }}>
                             <i className="fa-solid fa-basket-shopping" /> Səbətə Əlavə Et
                         </button>

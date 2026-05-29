@@ -440,8 +440,14 @@ function ItemCard({ item, onAdd, onClick }) {
 
                 <div className={styles.cardFooter}>
                     <div className={styles.priceContainer}>
-                        <span className={styles.cardPrice}>{Number(item.price || 0).toFixed(2)}</span>
-                        <span className={styles.currency}>AZN</span>
+                        {item.price ? (
+                            <>
+                                <span className={styles.cardPrice}>{Number(item.price).toFixed(2)}</span>
+                                <span className={styles.currency}>AZN</span>
+                            </>
+                        ) : (
+                            <span className={styles.noPriceLabel}>Qiymət qeyd olunmayıb</span>
+                        )}
                     </div>
                     <button className={styles.addBtn} onClick={e => { e.stopPropagation(); onAdd(item); }}>
                         <i className="fa-solid fa-plus" />
