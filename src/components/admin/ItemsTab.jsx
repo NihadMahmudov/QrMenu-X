@@ -41,10 +41,10 @@ export default function ItemsTab({ showToast }) {
     const addItem = () => {
         if (!form.catId) { showToast('⚠️ Kateqoriya seçin'); return; }
         if (!form.name.trim()) { showToast('⚠️ Yemək adı yazın'); return; }
-        if (!form.price || parseFloat(form.price) <= 0) { showToast('⚠️ Qiymət daxil edin'); return; }
+
         if (!form.imgUrl) { showToast('⚠️ Şəkil əlavə edin'); return; }
         update(db => {
-            db.items.push({ id: 'item_' + Date.now(), ...form, price: parseFloat(form.price) });
+            db.items.push({ id: 'item_' + Date.now(), ...form, price: form.price ? parseFloat(form.price) : null });
             return db;
         });
         setForm({ catId: '', name: '', desc: '', price: '', imgUrl: '', badge: '' });
@@ -57,7 +57,7 @@ export default function ItemsTab({ showToast }) {
     const saveEdit = () => {
         update(db => {
             const idx = db.items.findIndex(i => i.id === editing.id);
-            if (idx > -1) db.items[idx] = { ...editing, price: parseFloat(editing.price) };
+            if (idx > -1) db.items[idx] = { ...editing, price: editing.price ? parseFloat(editing.price) : null };
             return db;
         });
         setEditing(null);
@@ -100,7 +100,7 @@ export default function ItemsTab({ showToast }) {
 
                     {/* Price */}
                     <div className={s.field}>
-                        <label>Qiymət (₼) *</label>
+                        <label>Qiymət (₼)</label>
                         <div className={s.inp}><input type="number" placeholder="0.00" min="0" step="0.5" value={form.price} onChange={e => set('price', e.target.value)} /></div>
                     </div>
 
@@ -162,7 +162,7 @@ export default function ItemsTab({ showToast }) {
                             <div className={s.itemName}>{item.name}</div>
                             <div className={s.itemDesc}>{item.desc || '—'}</div>
                             <div className={s.itemMeta}>
-                                <span className={s.itemPrice}>{item.price?.toFixed(2)} ₼</span>
+                                <span className={s.itemPrice}>{item.price ? `${item.price.toFixed(2)} ₼` : 'Qiymət yoxdur'}</span>
                                 {item.badge && <span className={s.itemBadge}>{item.badge}</span>}
                                 <span className={s.itemCat}>{catName(item.catId)}</span>
                             </div>

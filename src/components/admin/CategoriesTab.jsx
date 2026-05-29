@@ -25,6 +25,26 @@ export default function CategoriesTab({ showToast }) {
         setConfirm(null);
     };
 
+    const moveUp = (index) => {
+        if (index === 0) return;
+        update(db => {
+            const cats = [...db.categories];
+            [cats[index - 1], cats[index]] = [cats[index], cats[index - 1]];
+            db.categories = cats;
+            return db;
+        });
+    };
+
+    const moveDown = (index) => {
+        if (index === db.categories.length - 1) return;
+        update(db => {
+            const cats = [...db.categories];
+            [cats[index], cats[index + 1]] = [cats[index + 1], cats[index]];
+            db.categories = cats;
+            return db;
+        });
+    };
+
     return (
         <div>
             <div className={s.addCard}>
@@ -38,10 +58,30 @@ export default function CategoriesTab({ showToast }) {
 
             <div className={s.list}>
                 {db.categories.length === 0 && <div className={s.empty}><i className="fa-solid fa-tags" /><p>Kateqoriya yoxdur</p></div>}
-                {db.categories.map(cat => {
+                {db.categories.map((cat, index) => {
                     const count = db.items.filter(i => i.catId === cat.id).length;
                     return (
                         <div key={cat.id} className={s.row}>
+                            {/* MOVE BUTTONS */}
+                            <div className={s.moveButtons}>
+                                <button
+                                    className={s.moveBtn}
+                                    onClick={() => moveUp(index)}
+                                    disabled={index === 0}
+                                    title="Yuxarı köçür"
+                                >
+                                    <i className="fa-solid fa-chevron-up" />
+                                </button>
+                                <button
+                                    className={s.moveBtn}
+                                    onClick={() => moveDown(index)}
+                                    disabled={index === db.categories.length - 1}
+                                    title="Aşağı köçür"
+                                >
+                                    <i className="fa-solid fa-chevron-down" />
+                                </button>
+                            </div>
+
                             <span className={s.rowEmoji}>{cat.emoji}</span>
                             <span className={s.rowName}>{cat.name}</span>
                             <span className={s.rowCount}>{count} yemək</span>
