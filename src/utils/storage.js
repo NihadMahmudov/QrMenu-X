@@ -19,9 +19,13 @@ function resizeImageToBlob(file, maxWidth, maxHeight, quality = 0.85) {
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
                 ctx.drawImage(img, 0, 0, w, h);
+                // Try WebP first (30% smaller), fallback to JPEG
+                const mimeType = canvas.toDataURL('image/webp').startsWith('data:image/webp') 
+                    ? 'image/webp' 
+                    : 'image/jpeg';
                 canvas.toBlob((blob) => {
-                    resolve(blob);
-                }, 'image/jpeg', quality);
+                    resolve({ blob, mimeType });
+                }, mimeType, quality);
             };
             img.src = reader.result;
         };
@@ -29,14 +33,15 @@ function resizeImageToBlob(file, maxWidth, maxHeight, quality = 0.85) {
     });
 }
 
-async function uploadToSupabase(blob, folder = 'items') {
-    const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substring(7)}.jpg`;
+async function uploadToSupabase({ blob, mimeType }, folder = 'items') {
+    const ext = mimeType === 'image/webp' ? 'webp' : 'jpg';
+    const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
     
     const { data, error } = await supabase.storage
         .from('images')
         .upload(fileName, blob, {
-            contentType: 'image/jpeg',
-            cacheControl: '3600',
+            contentType: mimeType,
+            cacheControl: '31536000', // 1 il cache — storage egress-i kəskin azaldır
             upsert: false
         });
 
@@ -51,16 +56,16 @@ async function uploadToSupabase(blob, folder = 'items') {
 
 // Public API
 export async function processcover(file) {
-    const blob = await resizeImageToBlob(file, 1600, 900, 0.9);
-    return uploadToSupabase(blob, 'covers');
+    const result = await resizeImageToBlob(file, 1200, 675, 0.85); // 1600→1200, quality azaldıldı
+    return uploadToSupabase(result, 'covers');
 }
 
 export async function processLogo(file) {
-    const blob = await resizeImageToBlob(file, 400, 400, 0.85);
-    return uploadToSupabase(blob, 'logos');
+    const result = await resizeImageToBlob(file, 300, 300, 0.82); // 400→300
+    return uploadToSupabase(result, 'logos');
 }
 
 export async function processItemImage(file) {
-    const blob = await resizeImageToBlob(file, 600, 600, 0.82);
-    return uploadToSupabase(blob, 'items');
+    const result = await resizeImageToBlob(file, 500, 500, 0.80); // 600→500, quality azaldıldı
+    return uploadToSupabase(result, 'items');
 }

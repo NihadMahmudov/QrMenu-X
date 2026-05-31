@@ -90,7 +90,7 @@ export function DataProvider({ children }) {
         try {
             const { data: prof } = await supabase
                 .from('profiles')
-                .select('*')
+                .select('id, email, name, status') // select('*') əvəzinə — PostgREST egress azalır
                 .eq('id', user.id)
                 .single();
             setProfile(prof);
