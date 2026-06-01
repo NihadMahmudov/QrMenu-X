@@ -50,35 +50,49 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
     useEffect(() => {
         if (!ownerParam) return;
         
-        // 1. Check cache first for instant load
         const cacheKey = `menu_cache_${ownerParam}`;
+        const cacheTimeKey = `menu_cache_time_${ownerParam}`;
+        const CACHE_TTL_MS = 10 * 60 * 1000; // 10 dəqiqə
+
         const cached = localStorage.getItem(cacheKey);
+        const cachedTime = parseInt(localStorage.getItem(cacheTimeKey) || '0');
+        const isCacheValid = cached && (Date.now() - cachedTime) < CACHE_TTL_MS;
+
+        // 1. Cache varsa — dərhal göstər (loading olmadan)
         if (cached) {
             try {
                 setRemoteDb(JSON.parse(cached));
             } catch (e) {
                 console.error("Cache parse error", e);
             }
-        } else {
-            setLoadingRemote(true);
         }
 
-        // 2. Fetch fresh data
+        // 2. Cache hələ təzədirsə — Supabase-ə müraciət ETMƏ (əsas qənaət!)
+        if (isCacheValid) {
+            setLoadingRemote(false);
+            return;
+        }
+
+        // 3. Yalnız cache yoxdursa və ya köhnəlibsə — fetch et
+        if (!cached) setLoadingRemote(true);
+
         supabase
             .from('menu_data')
-            .select('data')
+            .select('data, profiles!inner(status)')
             .eq('owner_email', ownerParam)
+            .eq('profiles.status', 'approved') // ← Yalnız aktiv hesablar
             .single()
             .then(({ data: menuRow, error: menuErr }) => {
                 if (menuRow) {
                     setRemoteDb(menuRow.data);
-                    // Update cache
                     localStorage.setItem(cacheKey, JSON.stringify(menuRow.data));
+                    localStorage.setItem(cacheTimeKey, Date.now().toString());
                 }
-                if (menuErr) console.error('Menu fetch error:', menuErr);
+                // Hesab dondurulubsa menuRow null gəlir — boş qalır
+                if (menuErr && menuErr.code !== 'PGRST116') console.error('Menu fetch error:', menuErr);
             })
             .finally(() => {
-                setLoadingRemote(false); // ALWAYS stop the spinner
+                setLoadingRemote(false);
             });
     }, [ownerParam]);
 
@@ -239,8 +253,10 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
         ? ITEMS
         : ITEMS.filter(item => item.catId === activeCategory)) || [];
 
+    const themeColor = R.themeColor || '#f15a24';
+
     return (
-        <div className={styles.page}>
+        <div className={styles.page} style={{'--theme-color': themeColor}}>
             {/* TOP BAR - Hide if in preview or if opened via QR (ownerParam exists) */}
             {!isPreviewMode && !ownerParam && (
                 <div className={styles.topBar}>
@@ -329,19 +345,13 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
             )}
 
             {/* PROMO BANNER */}
-            {!isPreviewMode && (isDemo ? (
+            {!isPreviewMode && isDemo && (
                 <div className={styles.promo} style={{ background: 'linear-gradient(135deg, rgba(255,140,66,.15), rgba(255,200,66,.1))', borderColor: 'rgba(255,140,66,.3)' }}>
                     <i className="fa-solid fa-circle-info" style={{ color: '#FF8C42' }} />
                     <div><strong>{t('demo_mode')}</strong><span>{t('demo_desc')}</span></div>
                     <Link to="/admin" className={styles.promoTag} style={{ background: '#FF8C42', textDecoration: 'none' }}>{t('go_admin')}</Link>
                 </div>
-            ) : (
-                <div className={styles.promo}>
-                    <i className="fa-solid fa-fire" />
-                    <div><strong>{t('special_info')}</strong><span>{t('service_fee')}</span></div>
-                    <span className={styles.promoTag}>{t('info')}</span>
-                </div>
-            ))}
+            )}
 
             {/* MENU */}
             <main className={styles.menu}>

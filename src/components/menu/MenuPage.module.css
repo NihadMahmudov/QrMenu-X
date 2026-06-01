@@ -1,9 +1,8 @@
 :root {
-    --accent: #f15a24;
     --accent-light: #ff8c42;
     --accent2: #ff7f32;
     --gold: #F59E0B;
-    --bg: #fffbf7; /* Lighter cream for better contrast with orange */
+    --bg: #fffbf7;
     --card: #FFFFFF;
     --border: rgba(0, 0, 0, 0.03);
     --text: #0F172A;
@@ -21,15 +20,24 @@
     min-height: 100vh;
     color: var(--text);
     padding-bottom: 120px;
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(217, 119, 6, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(245, 158, 11, 0.1) 0px, transparent 50%),
-        radial-gradient(at 50% 100%, rgba(217, 119, 6, 0.08) 0px, transparent 50%);
     background-attachment: fixed;
     overflow-x: hidden;
     position: relative;
     container-type: inline-size;
     container-name: menupage;
+    --accent: var(--theme-color, #f15a24);
+}
+
+.page::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: 
+        radial-gradient(at 0% 0%, color-mix(in srgb, var(--accent) 15%, transparent) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, color-mix(in srgb, var(--accent) 10%, transparent) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, color-mix(in srgb, var(--accent) 8%, transparent) 0px, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
 }
 
 .page::before {
@@ -38,7 +46,7 @@
     inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D97706' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     pointer-events: none;
-    z-index: 0;
+    z-index: 1;
 }
 
 /* TOP BAR */
@@ -238,14 +246,14 @@
     position: absolute;
     top: 15px;
     left: 15px;
-    background: #f15a24;
+    background: var(--accent);
     color: #fff;
     font-size: 11px;
     font-weight: 800;
     padding: 6px 14px;
     border-radius: 50px;
     z-index: 2;
-    box-shadow: 0 4px 12px rgba(241, 90, 36, 0.3);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
 .cardBody {
@@ -299,7 +307,7 @@
 .stars {
     display: flex;
     gap: 2px;
-    color: #f59e0b;
+    color: var(--accent);
     margin-right: 4px;
 }
 
@@ -324,14 +332,14 @@
 .cardPrice {
     font-size: 28px;
     font-weight: 900;
-    color: #f15a24;
+    color: var(--accent);
     line-height: 1;
 }
 
 .currency {
     font-size: 14px;
     font-weight: 800;
-    color: #f15a24;
+    color: var(--accent);
 }
 
 .noPriceLabel {
@@ -345,7 +353,7 @@
     width: 54px;
     height: 54px;
     border-radius: 18px;
-    background: #f15a24;
+    background: var(--accent);
     border: none;
     color: #fff;
     display: flex;
@@ -355,13 +363,13 @@
     cursor: pointer;
     transition: var(--tr);
     flex-shrink: 0;
-    box-shadow: 0 8px 20px rgba(241, 90, 36, 0.25);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
 .addBtn:hover {
-    background: #d9481b;
+    background: color-mix(in srgb, var(--accent) 85%, black);
     transform: scale(1.05);
-    box-shadow: 0 10px 25px rgba(241, 90, 36, 0.35);
+    box-shadow: 0 10px 25px color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .addBtn:active {
@@ -452,7 +460,7 @@
     .priceContainer { gap: 4px; display: flex; align-items: baseline; }
     .cardPrice { font-size: 22px; font-weight: 900; color: var(--accent); }
     .currency { font-size: 11px; font-weight: 800; color: var(--accent); }
-    .addBtn { width: 44px; height: 44px; font-size: 20px; border-radius: 14px; flex-shrink: 0; box-shadow: 0 6px 15px rgba(241, 90, 36, 0.2); }
+    .addBtn { width: 44px; height: 44px; font-size: 20px; border-radius: 14px; flex-shrink: 0; box-shadow: 0 6px 15px color-mix(in srgb, var(--accent) 20%, transparent); }
     .badge2 { top: 8px; left: 8px; padding: 5px 12px; font-size: 10px; z-index: 10; border-radius: 50px; }
 }
 

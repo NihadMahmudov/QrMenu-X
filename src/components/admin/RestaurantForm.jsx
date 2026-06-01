@@ -55,6 +55,13 @@ export default function RestaurantForm({ showToast, onFormChange }) {
                             <label>{t('slogan')}</label>
                             <div className={s.inp}><input placeholder="məs: Azərbaycan mətbəxi" value={form.tagline || ''} onChange={e => set('tagline', e.target.value)} /></div>
                         </div>
+                        <div className={s.field}>
+                            <label>Tema Rəngi</label>
+                            <div className={s.inp}>
+                                <input type="color" value={form.themeColor || '#f15a24'} onChange={e => set('themeColor', e.target.value)} style={{width: '60px', height: '40px', border: 'none', cursor: 'pointer'}} />
+                                <input type="text" value={form.themeColor || '#f15a24'} onChange={e => set('themeColor', e.target.value)} placeholder="#f15a24" style={{flex: 1}} />
+                            </div>
+                        </div>
 
                         {/* Cover Image Upload */}
                         <div className={`${s.field} ${s.span2}`}>
