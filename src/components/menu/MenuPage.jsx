@@ -5,6 +5,7 @@ import { useCart } from '../../context/CartContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../hooks/useToast';
 import { supabase } from '../../lib/supabase';
+import { getOptimizedUrl } from '../../utils/storage';
 import CartSheet from '../cart/CartSheet';
 import ItemModal from './ItemModal';
 import LanguageSelector from '../shared/LanguageSelector';
@@ -288,8 +289,8 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
             {(!isPreviewMode || previewTab === 'restaurant') && (
                 <header className={styles.hero}>
                     <div className={styles.heroCover}>
-                        <img src={R.coverUrl || FALLBACK_COVER} alt="" className={styles.heroBg} aria-hidden="true" onError={e => e.target.src = FALLBACK_COVER} />
-                        <img src={R.coverUrl || FALLBACK_COVER} alt="Cover" className={styles.heroImg} onError={e => e.target.src = FALLBACK_COVER} />
+                        <img src={getOptimizedUrl(R.coverUrl, { width: 1200, quality: 80 }) || FALLBACK_COVER} alt="" className={styles.heroBg} aria-hidden="true" onError={e => e.target.src = FALLBACK_COVER} />
+                        <img src={getOptimizedUrl(R.coverUrl, { width: 1200, quality: 80 }) || FALLBACK_COVER} alt="Cover" className={styles.heroImg} onError={e => e.target.src = FALLBACK_COVER} />
                         <div className={styles.heroOverlay} />
                     </div>
                     <div className={styles.heroContent}>
@@ -442,7 +443,7 @@ function ItemCard({ item, onAdd, onClick }) {
         <div className={styles.card} onClick={() => onClick(item)}>
             {item.badge && <div className={styles.badge2}>{item.badge}</div>}
             <div className={styles.imgWrap}>
-                <img src={item.imgUrl} alt={item.name} loading="lazy" onError={e => e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200'} />
+                <img src={getOptimizedUrl(item.imgUrl, { width: 500, quality: 80 })} alt={item.name} loading="lazy" onError={e => e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200'} />
             </div>
             <div className={styles.cardBody}>
                 <div className={styles.cardName}>{item.name}</div>

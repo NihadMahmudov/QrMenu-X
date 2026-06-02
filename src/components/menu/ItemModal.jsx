@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { getOptimizedUrl } from '../../utils/storage';
 import styles from './ItemModal.module.css';
 
 export default function ItemModal({ item, onClose, onAdd }) {
@@ -17,7 +18,7 @@ export default function ItemModal({ item, onClose, onAdd }) {
                 
                 <div className={styles.imageSection}>
                     <img 
-                        src={item.imgUrl} 
+                        src={getOptimizedUrl(item.imgUrl, { width: 800, quality: 85 })} 
                         alt={item.name} 
                         className={styles.mainImg}
                         onError={e => e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400'} 

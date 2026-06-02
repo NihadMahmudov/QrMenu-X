@@ -33,6 +33,15 @@ function resizeImageToBlob(file, maxWidth, maxHeight, quality = 0.85) {
     });
 }
 
+// Supabase CDN transform URL-i — şəkil ölçüsünü CDN tərəfindən kiçildir
+// Bu, Storage-dən gedən Egress-i azaldır (kiçik şəkil = az data)
+export function getOptimizedUrl(url, { width = 600, quality = 80 } = {}) {
+    if (!url || !url.includes('supabase.co/storage')) return url;
+    // Artıq transform varsa — dəyişmə
+    if (url.includes('?') && url.includes('width=')) return url;
+    return `${url}?width=${width}&quality=${quality}&format=webp`;
+}
+
 async function uploadToSupabase({ blob, mimeType }, folder = 'items') {
     const ext = mimeType === 'image/webp' ? 'webp' : 'jpg';
     const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
