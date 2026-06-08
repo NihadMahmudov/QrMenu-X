@@ -21,6 +21,7 @@ export default function ItemModal({ item, onClose, onAdd }) {
                         src={getOptimizedUrl(item.imgUrl, { width: 800, quality: 85 })} 
                         alt={item.name} 
                         className={styles.mainImg}
+                        crossOrigin="anonymous"
                         onError={e => e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400'} 
                     />
                     <div className={styles.imgGradient}></div>

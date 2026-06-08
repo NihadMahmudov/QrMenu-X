@@ -45,7 +45,7 @@ self.addEventListener('fetch', (event) => {
 
         // 🌐 Kəşdə yoxdur — Supabase-dən yüklə və kəşə qoy
         return fetch(event.request).then((response) => {
-          if (response.ok) {
+          if (response.ok || response.status === 0) {
             cache.put(event.request, response.clone());
           }
           return response;

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { getOptimizedUrl } from '../../utils/storage';
 import styles from './CartSheet.module.css';
 
 export default function CartSheet({ items, restaurant }) {
@@ -95,7 +96,7 @@ export default function CartSheet({ items, restaurant }) {
                         if (!item) return null;
                         return (
                             <div key={id} className={styles.row}>
-                                <img src={item.imgUrl} alt={item.name} className={styles.rowImg} onError={e => e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'} />
+                                <img src={getOptimizedUrl(item.imgUrl, { width: 100, quality: 70 })} alt={item.name} className={styles.rowImg} crossOrigin="anonymous" onError={e => e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'} />
                                 <div className={styles.rowInfo}>
                                     <div className={styles.rowName}>{item.name}</div>
                                     <div className={styles.rowPrice}>{item.price.toFixed(2)} ₼ {t('per_piece')}</div>

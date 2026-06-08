@@ -12,8 +12,8 @@ import LanguageSelector from '../shared/LanguageSelector';
 import Toast from '../shared/Toast';
 import styles from './MenuPage.module.css';
 
-const FALLBACK_COVER = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=85';
-const FALLBACK_LOGO = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=300&q=80';
+const FALLBACK_COVER = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=70';
+const FALLBACK_LOGO = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&q=75';
 
 export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb }) {
     const navigate = useNavigate();
@@ -289,14 +289,14 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
             {(!isPreviewMode || previewTab === 'restaurant') && (
                 <header className={styles.hero}>
                     <div className={styles.heroCover}>
-                        <img src={getOptimizedUrl(R.coverUrl, { width: 1200, quality: 80 }) || FALLBACK_COVER} alt="" className={styles.heroBg} aria-hidden="true" onError={e => e.target.src = FALLBACK_COVER} />
-                        <img src={getOptimizedUrl(R.coverUrl, { width: 1200, quality: 80 }) || FALLBACK_COVER} alt="Cover" className={styles.heroImg} onError={e => e.target.src = FALLBACK_COVER} />
+                        <img src={getOptimizedUrl(R.coverUrl, { width: 1000, quality: 75 }) || FALLBACK_COVER} alt="" className={styles.heroBg} aria-hidden="true" crossOrigin="anonymous" onError={e => e.target.src = FALLBACK_COVER} />
+                        <img src={getOptimizedUrl(R.coverUrl, { width: 1000, quality: 75 }) || FALLBACK_COVER} alt="Cover" className={styles.heroImg} crossOrigin="anonymous" onError={e => e.target.src = FALLBACK_COVER} />
                         <div className={styles.heroOverlay} />
                     </div>
                     <div className={styles.heroContent}>
                         <div className={styles.logoWrap}>
                             {R.logoUrl ? (
-                                <img src={R.logoUrl} alt="Logo" onError={e => { e.target.style.display = 'none'; e.target.parentElement.classList.add(styles.logoWithIcon); }} />
+                                <img src={getOptimizedUrl(R.logoUrl, { width: 200, quality: 80 })} alt="Logo" crossOrigin="anonymous" onError={e => { e.target.style.display = 'none'; e.target.parentElement.classList.add(styles.logoWithIcon); }} />
                             ) : (
                                 <div className={styles.logoIconFallback}>
                                     <i className="fa-solid fa-utensils" />
@@ -398,7 +398,7 @@ export default function MenuPage({ overrideIsPreview, overrideTab, overrideDb })
                 <footer className={styles.footer}>
                     <div className={styles.footerContent}>
                         <div className={styles.footerLogo}>
-                            {R.logoUrl ? <img src={R.logoUrl} alt="Logo" /> : <i className="fa-solid fa-utensils" />}
+                            {R.logoUrl ? <img src={getOptimizedUrl(R.logoUrl, { width: 100, quality: 75 })} alt="Logo" crossOrigin="anonymous" /> : <i className="fa-solid fa-utensils" />}
                         </div>
                         <h3>{R.name || 'QR Menyu'}</h3>
                         <p>Bizi sosial şəbəkələrdə izləyin</p>
@@ -443,7 +443,7 @@ function ItemCard({ item, onAdd, onClick }) {
         <div className={styles.card} onClick={() => onClick(item)}>
             {item.badge && <div className={styles.badge2}>{item.badge}</div>}
             <div className={styles.imgWrap}>
-                <img src={getOptimizedUrl(item.imgUrl, { width: 500, quality: 80 })} alt={item.name} loading="lazy" onError={e => e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200'} />
+                <img src={getOptimizedUrl(item.imgUrl, { width: 400, quality: 75 })} alt={item.name} loading="lazy" crossOrigin="anonymous" onError={e => e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&q=70'} />
             </div>
             <div className={styles.cardBody}>
                 <div className={styles.cardName}>{item.name}</div>

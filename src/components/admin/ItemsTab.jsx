@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { useData } from '../../context/DataContext';
-import { processItemImage } from '../../utils/storage';
+import { processItemImage, getOptimizedUrl } from '../../utils/storage';
 import s from './AdminForms.module.css';
 
 const BADGES = ['', 'Yeni', 'Populyar', 'Endirimli', 'Tövsiyə'];
@@ -157,7 +157,7 @@ export default function ItemsTab({ showToast }) {
                 {displayed.length === 0 && <div className={s.empty}><i className="fa-solid fa-utensils" /><p>Yemək yoxdur. Yuxarıdan əlavə edin.</p></div>}
                 {displayed.map(item => (
                     <div key={item.id} className={s.itemRow}>
-                        <img src={item.imgUrl} alt={item.name} className={s.itemImg} onError={e => e.target.style.display = 'none'} />
+                        <img src={getOptimizedUrl(item.imgUrl, { width: 150, quality: 75 })} alt={item.name} className={s.itemImg} crossOrigin="anonymous" onError={e => e.target.style.display = 'none'} />
                         <div className={s.itemInfo}>
                             <div className={s.itemName}>{item.name}</div>
                             <div className={s.itemDesc}>{item.desc || '—'}</div>

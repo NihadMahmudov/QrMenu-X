@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useData } from '../../context/DataContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { processcover, processLogo } from '../../utils/storage';
+import { processcover, processLogo, getOptimizedUrl } from '../../utils/storage';
 import s from './AdminForms.module.css';
 
 export default function RestaurantForm({ showToast, onFormChange }) {
@@ -68,7 +68,7 @@ export default function RestaurantForm({ showToast, onFormChange }) {
                             <label>{t('cover_image')}</label>
                             <div className={s.uploadArea} onClick={() => coverRef.current?.click()}>
                                 {form.coverUrl ? (
-                                    <img src={form.coverUrl} alt="Cover" className={s.previewImg} />
+                                    <img src={getOptimizedUrl(form.coverUrl, { width: 400, quality: 75 })} alt="Cover" className={s.previewImg} crossOrigin="anonymous" />
                                 ) : (
                                     <div className={s.uploadPlaceholder}>
                                         <i className="fa-solid fa-cloud-arrow-up" />
@@ -86,7 +86,7 @@ export default function RestaurantForm({ showToast, onFormChange }) {
                             <label>{t('logo_image')}</label>
                             <div className={s.uploadArea} onClick={() => logoRef.current?.click()} style={{ maxWidth: 200 }}>
                                 {form.logoUrl ? (
-                                    <img src={form.logoUrl} alt="Logo" className={s.previewImgRound} />
+                                    <img src={getOptimizedUrl(form.logoUrl, { width: 150, quality: 75 })} alt="Logo" className={s.previewImgRound} crossOrigin="anonymous" />
                                 ) : (
                                     <div className={s.uploadPlaceholder}>
                                         <i className="fa-solid fa-circle-user" />
