@@ -7,12 +7,24 @@ export default function CategoriesTab({ showToast }) {
     const [name, setName] = useState('');
     const [emoji, setEmoji] = useState('');
     const [confirm, setConfirm] = useState(null);
+    const [editing, setEditing] = useState(null); // { id, name, emoji }
 
     const add = () => {
         if (!name.trim()) { showToast('⚠️ Kateqoriya adı yazın'); return; }
         update(db => { db.categories.push({ id: 'cat_' + Date.now(), name: name.trim(), emoji: emoji.trim() || '🍽️' }); return db; });
         setName(''); setEmoji('');
         showToast('✅ Kateqoriya əlavə edildi');
+    };
+
+    const saveEdit = () => {
+        if (!editing.name.trim()) { showToast('⚠️ Ad boş ola bilməz'); return; }
+        update(db => {
+            const idx = db.categories.findIndex(c => c.id === editing.id);
+            if (idx > -1) db.categories[idx] = { ...db.categories[idx], name: editing.name.trim(), emoji: editing.emoji.trim() || '🍽️' };
+            return db;
+        });
+        setEditing(null);
+        showToast('✅ Kateqoriya yeniləndi');
     };
 
     const remove = (id) => {
@@ -85,11 +97,54 @@ export default function CategoriesTab({ showToast }) {
                             <span className={s.rowEmoji}>{cat.emoji}</span>
                             <span className={s.rowName}>{cat.name}</span>
                             <span className={s.rowCount}>{count} yemək</span>
-                            <button className={s.delBtn} onClick={() => setConfirm(cat.id)}><i className="fa-solid fa-trash" /></button>
+                            <div className={s.rowActions}>
+                                <button className={`${s.iconBtn} ${s.editBtn}`} onClick={() => setEditing({ id: cat.id, name: cat.name, emoji: cat.emoji })} title="Düzəlt"><i className="fa-solid fa-pen" /></button>
+                                <button className={s.delBtn} onClick={() => setConfirm(cat.id)} title="Sil"><i className="fa-solid fa-trash" /></button>
+                            </div>
                         </div>
                     );
                 })}
             </div>
+
+            {/* EDIT MODAL */}
+            {editing && (
+                <div className={s.confirmOverlay} onClick={() => setEditing(null)}>
+                    <div className={s.editBox} onClick={e => e.stopPropagation()}>
+                        <div className={s.editHeader}>
+                            <h3><i className="fa-solid fa-pen" style={{ marginRight: 10 }} />Kateqoriyanı Düzəlt</h3>
+                            <button className={s.closeBtn} onClick={() => setEditing(null)}><i className="fa-solid fa-xmark" /></button>
+                        </div>
+                        <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
+                            <div className={s.field}>
+                                <label>Kateqoriya Adı *</label>
+                                <div className={s.inp}>
+                                    <input
+                                        placeholder="Kateqoriya adı..."
+                                        value={editing.name}
+                                        onChange={e => setEditing(p => ({ ...p, name: e.target.value }))}
+                                        onKeyDown={e => e.key === 'Enter' && saveEdit()}
+                                        autoFocus
+                                    />
+                                </div>
+                            </div>
+                            <div className={s.field}>
+                                <label>Emoji</label>
+                                <div className={s.inp}>
+                                    <input
+                                        placeholder="🍽️"
+                                        maxLength={4}
+                                        value={editing.emoji}
+                                        onChange={e => setEditing(p => ({ ...p, emoji: e.target.value }))}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className={s.saveBar} style={{ padding: '0 20px 20px' }}>
+                            <button className={s.saveBtn} onClick={saveEdit}><i className="fa-solid fa-floppy-disk" /> Yadda Saxla</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {confirm && (
                 <div className={s.confirmOverlay} onClick={() => setConfirm(null)}>
